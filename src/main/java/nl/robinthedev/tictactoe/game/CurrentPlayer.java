@@ -1,18 +1,23 @@
 package nl.robinthedev.tictactoe.game;
 
 import java.util.UUID;
+import nl.robinthedev.tictactoe.game.model.Player;
 
 record CurrentPlayer(UUID playerId) {
 
-  static CurrentPlayer create(PlayerX playerX) {
-    return new CurrentPlayer(playerX.uuid());
-  }
-
-  static CurrentPlayer create(PlayerO playerO) {
-    return new CurrentPlayer(playerO.uuid());
+  static CurrentPlayer create(Player player) {
+    return new CurrentPlayer(player.ref());
   }
 
   boolean hasId(UUID playerId) {
     return playerId().equals(playerId);
+  }
+
+  Player next(PlayerX playerX, PlayerO playerO) {
+    if (hasId(playerX.uuid())) {
+      return new Player(playerO.uuid());
+    } else {
+      return new Player(playerX.uuid());
+    }
   }
 }

@@ -2,8 +2,10 @@ package nl.robinthedev.tictactoe.game;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
+import nl.robinthedev.tictactoe.game.commands.MarkSquare;
 import nl.robinthedev.tictactoe.game.commands.StartNewGame;
 import nl.robinthedev.tictactoe.game.events.NewGameStarted;
+import nl.robinthedev.tictactoe.game.events.SquareMarked;
 import nl.robinthedev.tictactoe.game.model.GameId;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -33,11 +35,21 @@ class TicTacToeGame {
   @EventSourcingHandler
   void handle(NewGameStarted event) {
     gameId = event.gameId();
-    players = new Players(event.playerX(), event.playerO());
-    switch (event.startingPlayer()) {
-      case X -> players.nextMoveisForPlayerX();
-      case O -> players.nextMoveisForPlayerO();
-    }
+    players = Players.createPlayers(event.playerX(), event.playerO(), event.startingPlayer());
     grid = Grid.empty();
+  }
+
+  @CommandHandler
+  void on(MarkSquare command) {
+    var markResult = grid.markSquare(command.squareToMark(), players.getSymbolForCurrentPlayer());
+    apply(
+        new SquareMarked(
+            gameId, markResult.markedSquare(), markResult.newGridState(), players.getNextPlayer()));
+  }
+
+  @EventSourcingHandler
+  void handle(SquareMarked event) {
+    grid = Grid.from(event.gridState());
+    players = players.setNextPlayer(event.nextPlayer());
   }
 }

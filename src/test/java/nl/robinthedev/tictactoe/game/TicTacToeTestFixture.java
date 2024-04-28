@@ -1,11 +1,15 @@
 package nl.robinthedev.tictactoe.game;
 
 import nl.robinthedev.tictactoe.game.events.NewGameStarted;
+import nl.robinthedev.tictactoe.game.events.SquareMarked;
 import nl.robinthedev.tictactoe.game.model.GameId;
+import nl.robinthedev.tictactoe.game.model.MarkedSquare;
+import nl.robinthedev.tictactoe.game.model.NewGridState;
 import nl.robinthedev.tictactoe.game.model.Player;
 import nl.robinthedev.tictactoe.game.model.StartingPlayer;
 import org.axonframework.test.aggregate.AggregateTestFixture;
 import org.axonframework.test.aggregate.ResultValidator;
+import org.axonframework.test.aggregate.TestExecutor;
 
 class TicTacToeTestFixture {
   static final String GAME_UUID = "f1a7e49e-7467-429b-8bb8-9189fa39c9ec";
@@ -27,7 +31,15 @@ class TicTacToeTestFixture {
     return ticTacToeGame.when(command);
   }
 
+  TestExecutor<TicTacToeGame> given(Object... domainEvents) {
+    return ticTacToeGame.given(domainEvents);
+  }
+
   NewGameStarted newGameStarted() {
     return new NewGameStarted(gameId, john, annabel, StartingPlayer.X);
+  }
+
+  public SquareMarked squareMarkedByJohn(MarkedSquare markedSquare, NewGridState newGridState) {
+    return new SquareMarked(gameId, markedSquare, newGridState, annabel);
   }
 }

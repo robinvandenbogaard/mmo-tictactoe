@@ -2,26 +2,34 @@ package nl.robinthedev.tictactoe.game;
 
 import java.util.UUID;
 import nl.robinthedev.tictactoe.game.model.Player;
+import nl.robinthedev.tictactoe.game.model.PlayerSymbol;
+import nl.robinthedev.tictactoe.game.model.StartingPlayer;
 
-class Players {
-  private final PlayerX playerX;
-  private final PlayerO playerO;
-  private CurrentPlayer currentPlayer;
+record Players(PlayerX playerX, PlayerO playerO, CurrentPlayer currentPlayer) {
 
-  public Players(Player playerX, Player playerO) {
-    this.playerX = PlayerX.create(playerX);
-    this.playerO = PlayerO.create(playerO);
-  }
-
-  public void nextMoveisForPlayerX() {
-    currentPlayer = CurrentPlayer.create(playerX);
-  }
-
-  public void nextMoveisForPlayerO() {
-    currentPlayer = CurrentPlayer.create(playerO);
+  public static Players createPlayers(
+      Player playerX, Player playerO, StartingPlayer startingPlayer) {
+    var currentPlayer =
+        switch (startingPlayer) {
+          case X -> CurrentPlayer.create(playerX);
+          case O -> CurrentPlayer.create(playerO);
+        };
+    return new Players(PlayerX.create(playerX), PlayerO.create(playerO), currentPlayer);
   }
 
   public boolean isPlayerTurn(UUID uuid) {
     return currentPlayer.hasId(uuid);
+  }
+
+  public PlayerSymbol getSymbolForCurrentPlayer() {
+    return PlayerSymbol.X;
+  }
+
+  public Player getNextPlayer() {
+    return currentPlayer.next(playerX, playerO);
+  }
+
+  public Players setNextPlayer(Player player) {
+    return new Players(playerX, playerO, CurrentPlayer.create(player));
   }
 }
