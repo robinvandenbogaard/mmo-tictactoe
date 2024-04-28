@@ -1,4 +1,4 @@
-package nl.robinthedev.tictactoe.tictactoemmo;
+package nl.robinthedev.tictactoe;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -7,7 +7,5 @@ import org.springframework.boot.test.context.SpringBootTest;
 class TicTacToeMmoApplicationTests {
 
   @Test
-  void contextLoads() {
-  }
-
+  void contextLoads() {}
 }
