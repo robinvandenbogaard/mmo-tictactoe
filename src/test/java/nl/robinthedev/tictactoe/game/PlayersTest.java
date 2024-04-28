@@ -1,6 +1,7 @@
 package nl.robinthedev.tictactoe.game;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.UUID;
 import nl.robinthedev.tictactoe.game.model.PlayerId;
@@ -19,8 +20,10 @@ class PlayersTest {
   }
 
   @Test
-  void setNextPlayerToSamePlayer() {
-    var players = Players.createPlayers(playerX, playerO, StartingPlayer.X).setNextPlayer(playerX);
-    assertThat(players).isEqualTo(Players.createPlayers(playerX, playerO, StartingPlayer.X));
+  void setNextPlayerToSamePlayerIsNotAllowed() {
+    var players = Players.createPlayers(playerX, playerO, StartingPlayer.X);
+
+    assertThatThrownBy(() -> players.setNextPlayer(playerX))
+        .isInstanceOf(IllegalArgumentException.class);
   }
 }

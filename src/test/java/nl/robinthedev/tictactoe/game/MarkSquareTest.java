@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import nl.robinthedev.tictactoe.game.commands.MarkSquare;
 import nl.robinthedev.tictactoe.game.model.SquareToMark;
+import nl.robinthedev.tictactoe.game.model.StartingPlayer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -77,7 +78,7 @@ class MarkSquareTest {
   @Test
   void gameEndedWithWinnerEvents() {
     fixture
-        .given(fixture.newGameStartedEvent())
+        .given(fixture.newGameStartedEvent(StartingPlayer.O))
         .andGiven(
             fixture.squareMarkedByAnnabelEvent(
                 SquareToMark.TOP_CENTER, Grid.fromString("x,o,-,x,o,-,-,-,-")))
@@ -92,7 +93,7 @@ class MarkSquareTest {
   @Test
   void gameEndedInDraw() {
     fixture
-        .given(fixture.newGameStartedEvent())
+        .given(fixture.newGameStartedEvent(StartingPlayer.O))
         .andGiven(
             fixture.squareMarkedByAnnabelEvent(
                 SquareToMark.TOP_CENTER, Grid.fromString("x,x,o,o,o,x,x,o,-")))

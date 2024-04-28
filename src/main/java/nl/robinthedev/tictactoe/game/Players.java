@@ -25,6 +25,10 @@ record Players(PlayerX playerX, PlayerO playerO, CurrentPlayer currentPlayer) {
   }
 
   public Players setNextPlayer(PlayerId playerId) {
+    if (currentPlayer.hasId(playerId))
+      throw new IllegalArgumentException(
+          "Next player can't be changed to the current player. Expected another playerId.");
+
     var symbol = playerId.equals(playerX.ref()) ? PlayerSymbol.X : PlayerSymbol.O;
     return new Players(playerX, playerO, CurrentPlayer.create(playerId, symbol));
   }

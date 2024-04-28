@@ -38,7 +38,11 @@ class TicTacToeTestFixture {
   }
 
   NewGameStarted newGameStartedEvent() {
-    return new NewGameStarted(gameId, john, annabel, StartingPlayer.X);
+    return newGameStartedEvent(StartingPlayer.X);
+  }
+
+  NewGameStarted newGameStartedEvent(StartingPlayer startingPlayer) {
+    return new NewGameStarted(gameId, john, annabel, startingPlayer);
   }
 
   public SquareMarked squareMarkedByJohnEvent(SquareToMark squareToMark, Grid expectedGrid) {
