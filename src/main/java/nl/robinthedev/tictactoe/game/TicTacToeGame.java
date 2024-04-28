@@ -10,9 +10,7 @@ import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedNotThePlayersTurn;
 import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedSquareAlreadyTaken;
 import nl.robinthedev.tictactoe.game.events.NewGameStarted;
 import nl.robinthedev.tictactoe.game.events.SquareMarked;
-import nl.robinthedev.tictactoe.game.events.TicTacToeEvent;
 import nl.robinthedev.tictactoe.game.model.GameId;
-import nl.robinthedev.tictactoe.game.model.PlayerId;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateCreationPolicy;
@@ -56,15 +54,13 @@ class TicTacToeGame {
     }
 
     var markResult = grid.markSquare(command.squareToMark(), currentPlayer.playerSymbol());
-    apply(toEvent(markResult, player));
-  }
-
-  private TicTacToeEvent toEvent(MarkResult markResult, PlayerId player) {
-    return switch (markResult) {
-      case ValidMarking(var square, var gridState) ->
+    var event =
+        switch (markResult) {
+          case ValidMarking(var square, var gridState) ->
               new SquareMarked(gameId, square, gridState, players.getNextPlayer());
-      case SquareAlreadyMarked() -> new MarkSquareRejectedSquareAlreadyTaken(gameId, player);
-    };
+          case SquareAlreadyMarked() -> new MarkSquareRejectedSquareAlreadyTaken(gameId, player);
+        };
+    apply(event);
   }
 
   @EventSourcingHandler

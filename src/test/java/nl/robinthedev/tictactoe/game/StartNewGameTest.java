@@ -19,7 +19,7 @@ class StartNewGameTest {
   void startsNewGame() {
     fixture
         .when(new StartNewGame(fixture.gameId, fixture.john, fixture.annabel))
-        .expectEvents(fixture.newGameStarted())
+        .expectEvents(fixture.newGameStartedEvent())
         .expectState(game -> assertThat(game.gameId).isEqualTo(fixture.gameId));
   }
 

@@ -1,16 +1,14 @@
 package nl.robinthedev.tictactoe.game;
 
 import java.util.UUID;
-import java.util.function.Supplier;
-import nl.robinthedev.tictactoe.game.commands.MarkSquare;
 import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedNotThePlayersTurn;
 import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedSquareAlreadyTaken;
 import nl.robinthedev.tictactoe.game.events.NewGameStarted;
 import nl.robinthedev.tictactoe.game.events.SquareMarked;
 import nl.robinthedev.tictactoe.game.model.GameId;
 import nl.robinthedev.tictactoe.game.model.MarkedSquare;
-import nl.robinthedev.tictactoe.game.model.NewGridState;
 import nl.robinthedev.tictactoe.game.model.PlayerId;
+import nl.robinthedev.tictactoe.game.model.PlayerSymbol;
 import nl.robinthedev.tictactoe.game.model.SquareToMark;
 import nl.robinthedev.tictactoe.game.model.StartingPlayer;
 import org.axonframework.test.aggregate.AggregateTestFixture;
@@ -41,20 +39,21 @@ class TicTacToeTestFixture {
     return ticTacToeGame.given(domainEvents);
   }
 
-  TestExecutor<TicTacToeGame> givenState(Supplier<TicTacToeGame> aggregate) {
-    return ticTacToeGame.givenState(aggregate);
-  }
-
-  NewGameStarted newGameStarted() {
+  NewGameStarted newGameStartedEvent() {
     return new NewGameStarted(gameId, john, annabel, StartingPlayer.X);
   }
 
-  public SquareMarked squareMarkedByJohn(MarkedSquare markedSquare, NewGridState newGridState) {
-    return new SquareMarked(gameId, markedSquare, newGridState, annabel);
+  public SquareMarked squareMarkedByJohnEvent(SquareToMark squareToMark, Grid expectedGrid) {
+    return new SquareMarked(
+        gameId,
+        MarkedSquare.of(squareToMark, PlayerSymbol.X),
+        expectedGrid.toNewGridState(),
+        annabel);
   }
 
-  public SquareMarked squareMarkedByAnnabel(MarkedSquare markedSquare, NewGridState newGridState) {
-    return new SquareMarked(gameId, markedSquare, newGridState, john);
+  public SquareMarked squareMarkedByAnnabelEvent(SquareToMark squareToMark, Grid expectedGrid) {
+    return new SquareMarked(
+        gameId, MarkedSquare.of(squareToMark, PlayerSymbol.O), expectedGrid.toNewGridState(), john);
   }
 
   public MarkSquareRejectedNotThePlayersTurn itsNotAnnabelsTurnEvent() {
@@ -63,21 +62,5 @@ class TicTacToeTestFixture {
 
   public MarkSquareRejectedSquareAlreadyTaken squareIsAlreadyMarkedEvent() {
     return new MarkSquareRejectedSquareAlreadyTaken(gameId, annabel);
-  }
-
-  MarkSquare johnMarksTopLeft() {
-    return new MarkSquare(gameId, john, SquareToMark.TOP_LEFT);
-  }
-
-  MarkSquare annabelMarksTopLeft() {
-    return annabelMarks(SquareToMark.TOP_LEFT);
-  }
-
-  public Players annabelsTurn() {
-    return Players.createPlayers(john, annabel, StartingPlayer.O);
-  }
-
-  public MarkSquare annabelMarks(SquareToMark squareToMark) {
-    return new MarkSquare(gameId, annabel, squareToMark);
   }
 }

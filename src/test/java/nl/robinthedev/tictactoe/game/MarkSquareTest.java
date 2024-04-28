@@ -2,8 +2,7 @@ package nl.robinthedev.tictactoe.game;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import nl.robinthedev.tictactoe.game.model.MarkedSquare;
-import nl.robinthedev.tictactoe.game.model.PlayerSymbol;
+import nl.robinthedev.tictactoe.game.commands.MarkSquare;
 import nl.robinthedev.tictactoe.game.model.SquareToMark;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,71 +17,60 @@ class MarkSquareTest {
   }
 
   @Test
-  void marksTheSquare() {
-    var expectedGrid = Grid.fromString("x,-,-,-,-,-,-,-,-");
-
+  void dispatchesAnSquareMarkedEvent() {
     fixture
-        .given(fixture.newGameStarted())
-        .when(fixture.johnMarksTopLeft())
+        .given(fixture.newGameStartedEvent())
+        .when(new MarkSquare(fixture.gameId, fixture.john, SquareToMark.TOP_LEFT))
         .expectEvents(
-            fixture.squareMarkedByJohn(
-                MarkedSquare.of(SquareToMark.TOP_LEFT, PlayerSymbol.X),
-                expectedGrid.toNewGridState()))
-        .expectState(game -> assertThat(game.grid).isEqualTo(expectedGrid));
+            fixture.squareMarkedByJohnEvent(
+                SquareToMark.TOP_LEFT, Grid.fromString("x,-,-,-,-,-,-,-,-")));
+  }
+
+  @Test
+  void updatesTheGrid() {
+    fixture
+        .given(fixture.newGameStartedEvent())
+        .when(new MarkSquare(fixture.gameId, fixture.john, SquareToMark.TOP_LEFT))
+        .expectState(game -> assertThat(game.grid).isEqualTo(Grid.fromString("x,-,-,-,-,-,-,-,-")));
   }
 
   @Test
   void updatesTheCurrentPlayerToAnnabel() {
     fixture
-        .given(fixture.newGameStarted())
-        .when(fixture.johnMarksTopLeft())
+        .given(fixture.newGameStartedEvent())
+        .when(new MarkSquare(fixture.gameId, fixture.john, SquareToMark.TOP_LEFT))
         .expectState(game -> assertThat(game.players.isPlayerTurn(fixture.annabel)).isTrue());
   }
 
   @Test
   void annabelCannotMarkASquareInJohnsTurn() {
     fixture
-        .given(fixture.newGameStarted())
-        .when(fixture.annabelMarksTopLeft())
-        .expectEvents(fixture.itsNotAnnabelsTurnEvent())
-        .expectState(game -> assertThat(game.players.isPlayerTurn(fixture.john)).isTrue());
+        .given(fixture.newGameStartedEvent())
+        .when(new MarkSquare(fixture.gameId, fixture.annabel, SquareToMark.TOP_LEFT))
+        .expectEvents(fixture.itsNotAnnabelsTurnEvent());
   }
 
   @Test
   void annabelCannotMarkASquareThatJohnAlreadyMarked() {
-    var expectedGrid = Grid.fromString("x,-,-,-,-,-,-,-,-");
-    var initialState = new TicTacToeGame();
-    initialState.gameId = fixture.gameId;
-    initialState.grid = expectedGrid;
-    initialState.players = fixture.annabelsTurn();
-
     fixture
-        .givenState(() -> initialState)
-        .when(fixture.annabelMarksTopLeft())
-        .expectEvents(fixture.squareIsAlreadyMarkedEvent())
-        .expectState(game -> assertThat(game.players.isPlayerTurn(fixture.annabel)).isTrue());
+        .given(fixture.newGameStartedEvent())
+        .andGiven(
+            fixture.squareMarkedByJohnEvent(
+                SquareToMark.TOP_LEFT, Grid.fromString("x,-,-,-,-,-,-,-,-")))
+        .when(new MarkSquare(fixture.gameId, fixture.annabel, SquareToMark.TOP_LEFT))
+        .expectEvents(fixture.squareIsAlreadyMarkedEvent());
   }
 
   @Test
   void annabelCanMarkAnEmptySquare() {
-    var initialState = new TicTacToeGame();
-    initialState.gameId = fixture.gameId;
-    initialState.grid = Grid.fromString("x,-,-,-,-,-,-,-,-");
-    initialState.players = fixture.annabelsTurn();
-
-    var expectedGrid = Grid.fromString("x,-,-,-,o,-,-,-,-");
-
     fixture
-        .givenState(() -> initialState)
-        .when(fixture.annabelMarks(SquareToMark.MIDDLE_CENTER))
+        .given(fixture.newGameStartedEvent())
+        .andGiven(
+            fixture.squareMarkedByJohnEvent(
+                SquareToMark.TOP_LEFT, Grid.fromString("x,-,-,-,-,-,-,-,-")))
+        .when(new MarkSquare(fixture.gameId, fixture.annabel, SquareToMark.MIDDLE_CENTER))
         .expectEvents(
-            fixture.squareMarkedByAnnabel(
-                MarkedSquare.of(SquareToMark.MIDDLE_CENTER, PlayerSymbol.O),
-                expectedGrid.toNewGridState()))
-        .expectState(
-            game -> {
-              assertThat(game.players.isPlayerTurn(fixture.john)).isTrue();
-              assertThat(game.grid).isEqualTo(expectedGrid);
-            });
+            fixture.squareMarkedByAnnabelEvent(
+                SquareToMark.MIDDLE_CENTER, Grid.fromString("x,-,-,-,o,-,-,-,-")));
   }
 }
