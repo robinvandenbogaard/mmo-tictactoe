@@ -75,7 +75,7 @@ class MarkSquareTest {
   }
 
   @Test
-  void gameEndedEvents() {
+  void gameEndedWithWinnerEvents() {
     fixture
         .given(fixture.newGameStartedEvent())
         .andGiven(
@@ -87,5 +87,19 @@ class MarkSquareTest {
                 SquareToMark.BOTTOM_LEFT, Grid.fromString("x,o,-,x,o,-,x,-,-")),
             fixture.gameWonByJohnEvent(),
             fixture.gameLostByAnnabelEvent());
+  }
+
+  @Test
+  void gameEndedInDraw() {
+    fixture
+        .given(fixture.newGameStartedEvent())
+        .andGiven(
+            fixture.squareMarkedByAnnabelEvent(
+                SquareToMark.TOP_CENTER, Grid.fromString("x,x,o,o,o,x,x,o,-")))
+        .when(new MarkSquare(fixture.gameId, fixture.john, SquareToMark.BOTTOM_RIGHT))
+        .expectEvents(
+            fixture.squareMarkedByJohnEvent(
+                SquareToMark.BOTTOM_RIGHT, Grid.fromString("x,x,o,o,o,x,x,o,x")),
+            fixture.gameEndedInDrawEvent());
   }
 }

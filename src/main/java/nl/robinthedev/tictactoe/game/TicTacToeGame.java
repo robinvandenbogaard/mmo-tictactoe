@@ -3,11 +3,13 @@ package nl.robinthedev.tictactoe.game;
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 import java.util.List;
-import nl.robinthedev.tictactoe.game.MarkResult.GameFinished;
+import nl.robinthedev.tictactoe.game.MarkResult.GameFinishedInDraw;
+import nl.robinthedev.tictactoe.game.MarkResult.GameFinishedWithWinner;
 import nl.robinthedev.tictactoe.game.MarkResult.SquareAlreadyMarked;
 import nl.robinthedev.tictactoe.game.MarkResult.ValidMarking;
 import nl.robinthedev.tictactoe.game.commands.MarkSquare;
 import nl.robinthedev.tictactoe.game.commands.StartNewGame;
+import nl.robinthedev.tictactoe.game.events.GameDraw;
 import nl.robinthedev.tictactoe.game.events.GameLost;
 import nl.robinthedev.tictactoe.game.events.GameWon;
 import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedNotThePlayersTurn;
@@ -15,6 +17,7 @@ import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedSquareAlreadyTaken
 import nl.robinthedev.tictactoe.game.events.NewGameStarted;
 import nl.robinthedev.tictactoe.game.events.SquareMarked;
 import nl.robinthedev.tictactoe.game.model.GameId;
+import nl.robinthedev.tictactoe.game.model.PlayerSymbol;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateCreationPolicy;
@@ -65,11 +68,18 @@ class TicTacToeGame {
               List.of(new SquareMarked(gameId, square, gridState, players.getNextPlayer()));
           case SquareAlreadyMarked() ->
               List.of(new MarkSquareRejectedSquareAlreadyTaken(gameId, player));
-          case GameFinished(var square, var gridState, var winningSymbol) ->
+          case GameFinishedWithWinner(var square, var gridState, var winningSymbol) ->
               List.of(
                   new SquareMarked(gameId, square, gridState, players.getNextPlayer()),
                   new GameWon(gameId, players.getPlayerWithSymbol(winningSymbol)),
                   new GameLost(gameId, players.getPlayerWithSymbol(winningSymbol.other())));
+          case GameFinishedInDraw(var square, var gridState) ->
+              List.of(
+                  new SquareMarked(gameId, square, gridState, players.getNextPlayer()),
+                  new GameDraw(
+                      gameId,
+                      players.getPlayerWithSymbol(PlayerSymbol.X),
+                      players.getPlayerWithSymbol(PlayerSymbol.O)));
         };
     events.forEach(AggregateLifecycle::apply);
   }

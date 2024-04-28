@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import nl.robinthedev.tictactoe.game.MarkResult.GameFinished;
+import nl.robinthedev.tictactoe.game.MarkResult.GameFinishedInDraw;
+import nl.robinthedev.tictactoe.game.MarkResult.GameFinishedWithWinner;
 import nl.robinthedev.tictactoe.game.MarkResult.SquareAlreadyMarked;
 import nl.robinthedev.tictactoe.game.MarkResult.ValidMarking;
 import nl.robinthedev.tictactoe.game.model.MarkedSquare;
@@ -52,19 +53,24 @@ record Grid(List<SquareSymbol> squares) {
     }
 
     var updatedSquares = updateSquares(position, symbol);
+    var markedSquare = new MarkedSquare(squareToMark.column(), squareToMark.row(), symbol);
+    var newGridState = new NewGridState(updatedSquares);
     return getWinningSymbol(updatedSquares)
         .map(
             winningSymbol ->
-                (MarkResult)
-                    new GameFinished(
-                        new MarkedSquare(squareToMark.column(), squareToMark.row(), symbol),
-                        new NewGridState(updatedSquares),
-                        symbol))
+                (MarkResult) new GameFinishedWithWinner(markedSquare, newGridState, symbol))
         .orElseGet(
-            () ->
-                new ValidMarking(
-                    new MarkedSquare(squareToMark.column(), squareToMark.row(), symbol),
-                    new NewGridState(updatedSquares)));
+            () -> {
+              if (isFullGrid(updatedSquares)) {
+                return new GameFinishedInDraw(markedSquare, newGridState);
+              } else {
+                return new ValidMarking(markedSquare, newGridState);
+              }
+            });
+  }
+
+  private boolean isFullGrid(List<SquareSymbol> updatedSquares) {
+    return updatedSquares.stream().noneMatch(EMPTY::equals);
   }
 
   private int getPosition(SquareToMark squareToMark) {
