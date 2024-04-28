@@ -1,10 +1,9 @@
 package nl.robinthedev.tictactoe.game;
 
-import java.util.UUID;
-import nl.robinthedev.tictactoe.game.model.Player;
+import nl.robinthedev.tictactoe.game.model.PlayerId;
 
-record PlayerX(UUID uuid) {
-  static PlayerX create(Player player) {
-    return new PlayerX(player.ref());
+record PlayerX(PlayerId ref) {
+  static PlayerX create(PlayerId playerId) {
+    return new PlayerX(playerId);
   }
 }

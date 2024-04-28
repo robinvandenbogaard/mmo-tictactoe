@@ -1,6 +1,6 @@
 package nl.robinthedev.tictactoe.game.commands;
 
 import nl.robinthedev.tictactoe.game.model.GameId;
-import nl.robinthedev.tictactoe.game.model.Player;
+import nl.robinthedev.tictactoe.game.model.PlayerId;
 
-public record StartNewGame(GameId gameId, Player playerX, Player playerO) {}
+public record StartNewGame(GameId gameId, PlayerId playerX, PlayerId playerO) {}

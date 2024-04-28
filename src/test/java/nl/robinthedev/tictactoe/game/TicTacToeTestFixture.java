@@ -7,7 +7,7 @@ import nl.robinthedev.tictactoe.game.events.SquareMarked;
 import nl.robinthedev.tictactoe.game.model.GameId;
 import nl.robinthedev.tictactoe.game.model.MarkedSquare;
 import nl.robinthedev.tictactoe.game.model.NewGridState;
-import nl.robinthedev.tictactoe.game.model.Player;
+import nl.robinthedev.tictactoe.game.model.PlayerId;
 import nl.robinthedev.tictactoe.game.model.StartingPlayer;
 import org.axonframework.test.aggregate.AggregateTestFixture;
 import org.axonframework.test.aggregate.ResultValidator;
@@ -18,10 +18,10 @@ class TicTacToeTestFixture {
   GameId gameId = new GameId(GAME_UUID);
 
   static final UUID JOHN_UUID = UUID.fromString("ace08fc9-3b81-437d-9840-53abecdf0f0b");
-  Player john = new Player(JOHN_UUID);
+  PlayerId john = new PlayerId(JOHN_UUID);
 
   static final UUID ANNABEL_UUID = UUID.fromString("bcd8d6e1-2180-4f0d-b9d4-3389feacc402");
-  Player annabel = new Player(ANNABEL_UUID);
+  PlayerId annabel = new PlayerId(ANNABEL_UUID);
 
   AggregateTestFixture<TicTacToeGame> ticTacToeGame;
 

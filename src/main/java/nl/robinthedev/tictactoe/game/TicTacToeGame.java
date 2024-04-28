@@ -45,8 +45,8 @@ class TicTacToeGame {
     var player = command.playerRequestingMarking();
     var currentPlayer = players.currentPlayer();
 
-    if (currentPlayer.isNotSame(player)) {
-      apply(new MarkSquareRejectedNotThePlayersTurn(gameId, currentPlayer.toPlayer(), player));
+    if (currentPlayer.isNot(player)) {
+      apply(new MarkSquareRejectedNotThePlayersTurn(gameId, currentPlayer.ref(), player));
       return;
     }
 

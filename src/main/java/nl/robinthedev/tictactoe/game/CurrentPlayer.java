@@ -1,31 +1,26 @@
 package nl.robinthedev.tictactoe.game;
 
-import java.util.UUID;
-import nl.robinthedev.tictactoe.game.model.Player;
+import nl.robinthedev.tictactoe.game.model.PlayerId;
 
-record CurrentPlayer(UUID playerId) {
+record CurrentPlayer(PlayerId ref) {
 
-  static CurrentPlayer create(Player player) {
-    return new CurrentPlayer(player.ref());
+  static CurrentPlayer create(PlayerId playerId) {
+    return new CurrentPlayer(playerId);
   }
 
-  boolean hasId(UUID playerId) {
-    return playerId().equals(playerId);
+  boolean hasId(PlayerId playerId) {
+    return ref().equals(playerId);
   }
 
-  Player next(PlayerX playerX, PlayerO playerO) {
-    if (hasId(playerX.uuid())) {
-      return new Player(playerO.uuid());
+  PlayerId next(PlayerX playerX, PlayerO playerO) {
+    if (hasId(playerX.ref())) {
+      return playerO.ref();
     } else {
-      return new Player(playerX.uuid());
+      return playerX.ref();
     }
   }
 
-  public boolean isNotSame(Player player) {
-    return !playerId.equals(player.ref());
-  }
-
-  public Player toPlayer() {
-    return new Player(playerId);
+  public boolean isNot(PlayerId playerId) {
+    return !ref.equals(playerId);
   }
 }
