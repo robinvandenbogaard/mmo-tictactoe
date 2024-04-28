@@ -28,4 +28,11 @@ record Players(PlayerX playerX, PlayerO playerO, CurrentPlayer currentPlayer) {
     var symbol = playerId.equals(playerX.ref()) ? PlayerSymbol.X : PlayerSymbol.O;
     return new Players(playerX, playerO, CurrentPlayer.create(playerId, symbol));
   }
+
+  public PlayerId getPlayerWithSymbol(PlayerSymbol winningSymbol) {
+    return switch (winningSymbol) {
+      case X -> playerX.ref();
+      case O -> playerO.ref();
+    };
+  }
 }

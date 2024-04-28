@@ -73,4 +73,19 @@ class MarkSquareTest {
             fixture.squareMarkedByAnnabelEvent(
                 SquareToMark.MIDDLE_CENTER, Grid.fromString("x,-,-,-,o,-,-,-,-")));
   }
+
+  @Test
+  void gameEndedEvents() {
+    fixture
+        .given(fixture.newGameStartedEvent())
+        .andGiven(
+            fixture.squareMarkedByAnnabelEvent(
+                SquareToMark.TOP_CENTER, Grid.fromString("x,o,-,x,o,-,-,-,-")))
+        .when(new MarkSquare(fixture.gameId, fixture.john, SquareToMark.BOTTOM_LEFT))
+        .expectEvents(
+            fixture.squareMarkedByJohnEvent(
+                SquareToMark.BOTTOM_LEFT, Grid.fromString("x,o,-,x,o,-,x,-,-")),
+            fixture.gameWonByJohnEvent(),
+            fixture.gameLostByAnnabelEvent());
+  }
 }

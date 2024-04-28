@@ -2,10 +2,14 @@ package nl.robinthedev.tictactoe.game;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
+import java.util.List;
+import nl.robinthedev.tictactoe.game.MarkResult.GameFinished;
 import nl.robinthedev.tictactoe.game.MarkResult.SquareAlreadyMarked;
 import nl.robinthedev.tictactoe.game.MarkResult.ValidMarking;
 import nl.robinthedev.tictactoe.game.commands.MarkSquare;
 import nl.robinthedev.tictactoe.game.commands.StartNewGame;
+import nl.robinthedev.tictactoe.game.events.GameLost;
+import nl.robinthedev.tictactoe.game.events.GameWon;
 import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedNotThePlayersTurn;
 import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedSquareAlreadyTaken;
 import nl.robinthedev.tictactoe.game.events.NewGameStarted;
@@ -15,6 +19,7 @@ import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateCreationPolicy;
 import org.axonframework.modelling.command.AggregateIdentifier;
+import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.modelling.command.CreationPolicy;
 import org.axonframework.spring.stereotype.Aggregate;
 
@@ -54,13 +59,19 @@ class TicTacToeGame {
     }
 
     var markResult = grid.markSquare(command.squareToMark(), currentPlayer.playerSymbol());
-    var event =
+    var events =
         switch (markResult) {
           case ValidMarking(var square, var gridState) ->
-              new SquareMarked(gameId, square, gridState, players.getNextPlayer());
-          case SquareAlreadyMarked() -> new MarkSquareRejectedSquareAlreadyTaken(gameId, player);
+              List.of(new SquareMarked(gameId, square, gridState, players.getNextPlayer()));
+          case SquareAlreadyMarked() ->
+              List.of(new MarkSquareRejectedSquareAlreadyTaken(gameId, player));
+          case GameFinished(var square, var gridState, var winningSymbol) ->
+              List.of(
+                  new SquareMarked(gameId, square, gridState, players.getNextPlayer()),
+                  new GameWon(gameId, players.getPlayerWithSymbol(winningSymbol)),
+                  new GameLost(gameId, players.getPlayerWithSymbol(winningSymbol.other())));
         };
-    apply(event);
+    events.forEach(AggregateLifecycle::apply);
   }
 
   @EventSourcingHandler
