@@ -4,13 +4,9 @@ import static nl.robinthedev.tictactoe.game.model.SquareSymbol.EMPTY;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import nl.robinthedev.tictactoe.game.MarkResult.GameFinishedInDraw;
-import nl.robinthedev.tictactoe.game.MarkResult.GameFinishedWithWinner;
-import nl.robinthedev.tictactoe.game.MarkResult.SquareAlreadyMarked;
-import nl.robinthedev.tictactoe.game.MarkResult.ValidMarking;
-import nl.robinthedev.tictactoe.game.model.MarkedSquare;
 import nl.robinthedev.tictactoe.game.model.NewGridState;
 import nl.robinthedev.tictactoe.game.model.PlayerSymbol;
 import nl.robinthedev.tictactoe.game.model.SquareSymbol;
@@ -27,6 +23,7 @@ record Grid(List<SquareSymbol> squares) {
           "A grid must contain %s squares. It received %s."
               .formatted(REQUIRED_SQUARES, squares.size()));
     }
+    squares = Collections.unmodifiableList(squares);
   }
 
   public static Grid empty() {
@@ -46,31 +43,14 @@ record Grid(List<SquareSymbol> squares) {
     return new NewGridState(squares);
   }
 
-  public MarkResult markSquare(SquareToMark squareToMark, PlayerSymbol symbol) {
-    var position = getPosition(squareToMark);
-    if (!squares.get(position).equals(EMPTY)) {
-      return new SquareAlreadyMarked();
-    }
-
-    var updatedSquares = updateSquares(position, symbol);
-    var markedSquare = new MarkedSquare(squareToMark.column(), squareToMark.row(), symbol);
-    var newGridState = new NewGridState(updatedSquares);
-    return getWinningSymbol(updatedSquares)
-        .map(
-            winningSymbol ->
-                (MarkResult) new GameFinishedWithWinner(markedSquare, newGridState, symbol))
-        .orElseGet(
-            () -> {
-              if (isFullGrid(updatedSquares)) {
-                return new GameFinishedInDraw(markedSquare, newGridState);
-              } else {
-                return new ValidMarking(markedSquare, newGridState);
-              }
-            });
+  public Grid markSquare(Move move) {
+    var position = getPosition(move.squareToMark());
+    var updatedSquares = updateSquares(position, move.playerSymbol());
+    return new Grid(updatedSquares);
   }
 
-  private boolean isFullGrid(List<SquareSymbol> updatedSquares) {
-    return updatedSquares.stream().noneMatch(EMPTY::equals);
+  boolean isFullGrid() {
+    return squares.stream().noneMatch(EMPTY::equals);
   }
 
   private int getPosition(SquareToMark squareToMark) {
@@ -83,21 +63,10 @@ record Grid(List<SquareSymbol> squares) {
       case X -> updatedSquares.set(position, SquareSymbol.X);
       case O -> updatedSquares.set(position, SquareSymbol.O);
     }
-    return updatedSquares;
+    return Collections.unmodifiableList(updatedSquares);
   }
 
-  private Optional<PlayerSymbol> getWinningSymbol(List<SquareSymbol> updatedSquares) {
-    return checkWinner(updatedSquares)
-        .map(
-            squareSymbol ->
-                switch (squareSymbol) {
-                  case X -> PlayerSymbol.X;
-                  case O -> PlayerSymbol.O;
-                  case EMPTY -> null;
-                });
-  }
-
-  private Optional<SquareSymbol> checkWinner(List<SquareSymbol> squares) {
+  private Optional<SquareSymbol> checkWinner() {
     // Check rows, columns, and diagonals directly
     // Rows: 0, 1, 2
     for (int i = 0; i < 3; i++) {
@@ -122,5 +91,14 @@ record Grid(List<SquareSymbol> squares) {
     }
 
     return Optional.empty();
+  }
+
+  public boolean isSquareMarked(SquareToMark squareToMark) {
+    int position = getPosition(squareToMark);
+    return !squares.get(position).equals(EMPTY);
+  }
+
+  public boolean hasWinner() {
+    return checkWinner().isPresent();
   }
 }

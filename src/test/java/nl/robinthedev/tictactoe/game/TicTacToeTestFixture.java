@@ -19,14 +19,9 @@ import org.axonframework.test.aggregate.ResultValidator;
 import org.axonframework.test.aggregate.TestExecutor;
 
 class TicTacToeTestFixture {
-  static final UUID GAME_UUID = UUID.fromString("f1a7e49e-7467-429b-8bb8-9189fa39c9ec");
-  GameId gameId = new GameId(GAME_UUID);
-
-  static final UUID JOHN_UUID = UUID.fromString("ace08fc9-3b81-437d-9840-53abecdf0f0b");
-  PlayerId john = new PlayerId(JOHN_UUID);
-
-  static final UUID ANNABEL_UUID = UUID.fromString("bcd8d6e1-2180-4f0d-b9d4-3389feacc402");
-  PlayerId annabel = new PlayerId(ANNABEL_UUID);
+  GameId gameId = new GameId(UUID.fromString("f1a7e49e-7467-429b-8bb8-9189fa39c9ec"));
+  PlayerId john = new PlayerId(UUID.fromString("ace08fc9-3b81-437d-9840-53abecdf0f0b"));
+  PlayerId annabel = new PlayerId(UUID.fromString("bcd8d6e1-2180-4f0d-b9d4-3389feacc402"));
 
   AggregateTestFixture<TicTacToeGame> ticTacToeGame;
 

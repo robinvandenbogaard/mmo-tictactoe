@@ -8,7 +8,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import java.util.stream.Stream;
-import nl.robinthedev.tictactoe.game.model.MarkedSquare;
 import nl.robinthedev.tictactoe.game.model.PlayerSymbol;
 import nl.robinthedev.tictactoe.game.model.SquareToMark;
 import org.junit.jupiter.api.Test;
@@ -57,12 +56,9 @@ class GridTest {
   @MethodSource("allPositionsX")
   void markSquareX(SquareToMark squareToMark, Grid expectedGrid) {
     var grid = Grid.empty();
-    var result = grid.markSquare(squareToMark, PlayerSymbol.X);
+    var result = grid.markSquare(new Move(squareToMark, PlayerSymbol.X));
 
-    assertThat(result)
-        .isEqualTo(
-            new MarkResult.ValidMarking(
-                MarkedSquare.of(squareToMark, PlayerSymbol.X), expectedGrid.toNewGridState()));
+    assertThat(result).isEqualTo(expectedGrid);
   }
 
   public static Stream<Arguments> allPositionsX() {
@@ -82,12 +78,9 @@ class GridTest {
   @MethodSource("allPositionsO")
   void markSquareO(SquareToMark squareToMark, Grid expectedGrid) {
     var grid = Grid.empty();
-    var result = grid.markSquare(squareToMark, PlayerSymbol.O);
+    var result = grid.markSquare(new Move(squareToMark, PlayerSymbol.O));
 
-    assertThat(result)
-        .isEqualTo(
-            new MarkResult.ValidMarking(
-                MarkedSquare.of(squareToMark, PlayerSymbol.O), expectedGrid.toNewGridState()));
+    assertThat(result).isEqualTo(expectedGrid);
   }
 
   public static Stream<Arguments> allPositionsO() {

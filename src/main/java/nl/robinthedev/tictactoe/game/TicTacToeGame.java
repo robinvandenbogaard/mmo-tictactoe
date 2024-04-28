@@ -2,11 +2,7 @@ package nl.robinthedev.tictactoe.game;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
-import java.util.List;
-import nl.robinthedev.tictactoe.game.MarkResult.GameFinishedInDraw;
-import nl.robinthedev.tictactoe.game.MarkResult.GameFinishedWithWinner;
-import nl.robinthedev.tictactoe.game.MarkResult.SquareAlreadyMarked;
-import nl.robinthedev.tictactoe.game.MarkResult.ValidMarking;
+import java.util.ArrayList;
 import nl.robinthedev.tictactoe.game.commands.MarkSquare;
 import nl.robinthedev.tictactoe.game.commands.StartNewGame;
 import nl.robinthedev.tictactoe.game.events.GameDraw;
@@ -16,8 +12,10 @@ import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedNotThePlayersTurn;
 import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedSquareAlreadyTaken;
 import nl.robinthedev.tictactoe.game.events.NewGameStarted;
 import nl.robinthedev.tictactoe.game.events.SquareMarked;
+import nl.robinthedev.tictactoe.game.events.TicTacToeEvent;
 import nl.robinthedev.tictactoe.game.model.GameId;
-import nl.robinthedev.tictactoe.game.model.PlayerSymbol;
+import nl.robinthedev.tictactoe.game.model.PlayerId;
+import nl.robinthedev.tictactoe.game.model.SquareToMark;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateCreationPolicy;
@@ -55,33 +53,41 @@ class TicTacToeGame {
   void on(MarkSquare command) {
     var player = command.playerRequestingMarking();
     var currentPlayer = players.currentPlayer();
-
     if (currentPlayer.isNot(player)) {
       apply(new MarkSquareRejectedNotThePlayersTurn(gameId, currentPlayer.ref(), player));
       return;
     }
 
-    var markResult = grid.markSquare(command.squareToMark(), currentPlayer.playerSymbol());
-    var events =
-        switch (markResult) {
-          case ValidMarking(var square, var gridState) ->
-              List.of(new SquareMarked(gameId, square, gridState, players.getNextPlayer()));
-          case SquareAlreadyMarked() ->
-              List.of(new MarkSquareRejectedSquareAlreadyTaken(gameId, player));
-          case GameFinishedWithWinner(var square, var gridState, var winningSymbol) ->
-              List.of(
-                  new SquareMarked(gameId, square, gridState, players.getNextPlayer()),
-                  new GameWon(gameId, players.getPlayerWithSymbol(winningSymbol)),
-                  new GameLost(gameId, players.getPlayerWithSymbol(winningSymbol.other())));
-          case GameFinishedInDraw(var square, var gridState) ->
-              List.of(
-                  new SquareMarked(gameId, square, gridState, players.getNextPlayer()),
-                  new GameDraw(
-                      gameId,
-                      players.getPlayerWithSymbol(PlayerSymbol.X),
-                      players.getPlayerWithSymbol(PlayerSymbol.O)));
-        };
-    events.forEach(AggregateLifecycle::apply);
+    var squareToMark = command.squareToMark();
+    if (grid.isSquareMarked(squareToMark)) {
+      apply(new MarkSquareRejectedSquareAlreadyTaken(gameId, player));
+      return;
+    }
+
+    doMarkSquare(squareToMark, currentPlayer, players.getNextPlayer())
+        .forEach(AggregateLifecycle::apply);
+  }
+
+  private ArrayList<TicTacToeEvent> doMarkSquare(
+      SquareToMark squareToMark, CurrentPlayer currentPlayer, PlayerId nextPlayer) {
+    var events = new ArrayList<TicTacToeEvent>();
+
+    var move = new Move(squareToMark, currentPlayer.playerSymbol());
+    var updatedGrid = grid.markSquare(move);
+
+    var newGridState = updatedGrid.toNewGridState();
+    var markedSquare = move.toMarkedSquare();
+
+    var squareMarked = new SquareMarked(gameId, markedSquare, newGridState, nextPlayer);
+    events.add(squareMarked);
+
+    if (updatedGrid.hasWinner()) {
+      events.add(new GameWon(gameId, currentPlayer.ref()));
+      events.add(new GameLost(gameId, nextPlayer));
+    } else if (updatedGrid.isFullGrid()) {
+      events.add(new GameDraw(gameId, players.playerX().ref(), players.playerO().ref()));
+    }
+    return events;
   }
 
   @EventSourcingHandler
