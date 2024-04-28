@@ -14,10 +14,15 @@ import nl.robinthedev.tictactoe.game.model.SquareSymbol;
 import nl.robinthedev.tictactoe.game.model.SquareToMark;
 
 record Grid(List<SquareSymbol> squares) {
+
+  public static final int GRID_SIZE = 3;
+  public static final int REQUIRED_SQUARES = GRID_SIZE * GRID_SIZE;
+
   Grid {
-    if (squares.size() != 9) {
+    if (squares.size() != REQUIRED_SQUARES) {
       throw new IllegalArgumentException(
-          "A grid must contain 9 squares. It received %s.".formatted(squares.size()));
+          "A grid must contain %s squares. It received %s."
+              .formatted(REQUIRED_SQUARES, squares.size()));
     }
   }
 
@@ -60,6 +65,6 @@ record Grid(List<SquareSymbol> squares) {
   }
 
   private int getPosition(SquareToMark squareToMark) {
-    return squareToMark.column() + (squareToMark.row() * squareToMark.column());
+    return squareToMark.column() + (squareToMark.row() * GRID_SIZE);
   }
 }

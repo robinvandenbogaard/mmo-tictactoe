@@ -7,7 +7,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
+import java.util.stream.Stream;
+import nl.robinthedev.tictactoe.game.model.MarkedSquare;
+import nl.robinthedev.tictactoe.game.model.PlayerSymbol;
+import nl.robinthedev.tictactoe.game.model.SquareToMark;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class GridTest {
 
@@ -30,8 +37,8 @@ class GridTest {
 
   @Test
   void buildsMixedGrid() {
-    assertThat(Grid.fromString("o,x,-,o,o,o,o,o,o"))
-        .isEqualTo(new Grid(List.of(O, X, EMPTY, O, O, O, O, O, O)));
+    assertThat(Grid.fromString("o,x,-,x,-,o,-,x,o"))
+        .isEqualTo(new Grid(List.of(O, X, EMPTY, X, EMPTY, O, EMPTY, X, O)));
   }
 
   @Test
@@ -44,5 +51,55 @@ class GridTest {
   void cannotDealWithLessThanNineFields() {
     assertThatThrownBy(() -> Grid.fromString("x,x,x,x,x,x,x,x"))
         .isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @ParameterizedTest
+  @MethodSource("allPositionsX")
+  void markSquareX(SquareToMark squareToMark, Grid expectedGrid) {
+    var grid = Grid.empty();
+    var result = grid.markSquare(squareToMark, PlayerSymbol.X);
+
+    assertThat(result)
+        .isEqualTo(
+            new MarkResult.ValidMarking(
+                MarkedSquare.of(squareToMark, PlayerSymbol.X), expectedGrid.toNewGridState()));
+  }
+
+  public static Stream<Arguments> allPositionsX() {
+    return Stream.of(
+        Arguments.of(SquareToMark.TOP_LEFT, Grid.fromString("x,-,-,-,-,-,-,-,-")),
+        Arguments.of(SquareToMark.TOP_CENTER, Grid.fromString("-,x,-,-,-,-,-,-,-")),
+        Arguments.of(SquareToMark.TOP_RIGHT, Grid.fromString("-,-,x,-,-,-,-,-,-")),
+        Arguments.of(SquareToMark.MIDDLE_LEFT, Grid.fromString("-,-,-,x,-,-,-,-,-")),
+        Arguments.of(SquareToMark.MIDDLE_CENTER, Grid.fromString("-,-,-,-,x,-,-,-,-")),
+        Arguments.of(SquareToMark.MIDDLE_RIGHT, Grid.fromString("-,-,-,-,-,x,-,-,-")),
+        Arguments.of(SquareToMark.BOTTOM_LEFT, Grid.fromString("-,-,-,-,-,-,x,-,-")),
+        Arguments.of(SquareToMark.BOTTOM_CENTER, Grid.fromString("-,-,-,-,-,-,-,x,-")),
+        Arguments.of(SquareToMark.BOTTOM_RIGHT, Grid.fromString("-,-,-,-,-,-,-,-,x")));
+  }
+
+  @ParameterizedTest
+  @MethodSource("allPositionsO")
+  void markSquareO(SquareToMark squareToMark, Grid expectedGrid) {
+    var grid = Grid.empty();
+    var result = grid.markSquare(squareToMark, PlayerSymbol.O);
+
+    assertThat(result)
+        .isEqualTo(
+            new MarkResult.ValidMarking(
+                MarkedSquare.of(squareToMark, PlayerSymbol.O), expectedGrid.toNewGridState()));
+  }
+
+  public static Stream<Arguments> allPositionsO() {
+    return Stream.of(
+        Arguments.of(SquareToMark.TOP_LEFT, Grid.fromString("o,-,-,-,-,-,-,-,-")),
+        Arguments.of(SquareToMark.TOP_CENTER, Grid.fromString("-,o,-,-,-,-,-,-,-")),
+        Arguments.of(SquareToMark.TOP_RIGHT, Grid.fromString("-,-,o,-,-,-,-,-,-")),
+        Arguments.of(SquareToMark.MIDDLE_LEFT, Grid.fromString("-,-,-,o,-,-,-,-,-")),
+        Arguments.of(SquareToMark.MIDDLE_CENTER, Grid.fromString("-,-,-,-,o,-,-,-,-")),
+        Arguments.of(SquareToMark.MIDDLE_RIGHT, Grid.fromString("-,-,-,-,-,o,-,-,-")),
+        Arguments.of(SquareToMark.BOTTOM_LEFT, Grid.fromString("-,-,-,-,-,-,o,-,-")),
+        Arguments.of(SquareToMark.BOTTOM_CENTER, Grid.fromString("-,-,-,-,-,-,-,o,-")),
+        Arguments.of(SquareToMark.BOTTOM_RIGHT, Grid.fromString("-,-,-,-,-,-,-,-,o")));
   }
 }

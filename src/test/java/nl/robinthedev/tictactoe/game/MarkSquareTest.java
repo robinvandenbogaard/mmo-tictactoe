@@ -62,4 +62,27 @@ class MarkSquareTest {
         .expectEvents(fixture.squareIsAlreadyMarkedEvent())
         .expectState(game -> assertThat(game.players.isPlayerTurn(fixture.annabel)).isTrue());
   }
+
+  @Test
+  void annabelCanMarkAnEmptySquare() {
+    var initialState = new TicTacToeGame();
+    initialState.gameId = fixture.gameId;
+    initialState.grid = Grid.fromString("x,-,-,-,-,-,-,-,-");
+    initialState.players = fixture.annabelsTurn();
+
+    var expectedGrid = Grid.fromString("x,-,-,-,o,-,-,-,-");
+
+    fixture
+        .givenState(() -> initialState)
+        .when(fixture.annabelMarks(SquareToMark.MIDDLE_CENTER))
+        .expectEvents(
+            fixture.squareMarkedByAnnabel(
+                MarkedSquare.of(SquareToMark.MIDDLE_CENTER, PlayerSymbol.O),
+                expectedGrid.toNewGridState()))
+        .expectState(
+            game -> {
+              assertThat(game.players.isPlayerTurn(fixture.john)).isTrue();
+              assertThat(game.grid).isEqualTo(expectedGrid);
+            });
+  }
 }

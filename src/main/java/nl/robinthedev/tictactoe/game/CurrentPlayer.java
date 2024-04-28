@@ -1,11 +1,12 @@
 package nl.robinthedev.tictactoe.game;
 
 import nl.robinthedev.tictactoe.game.model.PlayerId;
+import nl.robinthedev.tictactoe.game.model.PlayerSymbol;
 
-record CurrentPlayer(PlayerId ref) {
+record CurrentPlayer(PlayerId ref, PlayerSymbol playerSymbol) {
 
-  static CurrentPlayer create(PlayerId playerId) {
-    return new CurrentPlayer(playerId);
+  static CurrentPlayer create(PlayerId playerId, PlayerSymbol symbol) {
+    return new CurrentPlayer(playerId, symbol);
   }
 
   boolean hasId(PlayerId playerId) {

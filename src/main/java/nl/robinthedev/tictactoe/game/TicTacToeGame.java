@@ -55,7 +55,7 @@ class TicTacToeGame {
       return;
     }
 
-    var markResult = grid.markSquare(command.squareToMark(), players.getSymbolForCurrentPlayer());
+    var markResult = grid.markSquare(command.squareToMark(), currentPlayer.playerSymbol());
     apply(toEvent(markResult, player));
   }
 

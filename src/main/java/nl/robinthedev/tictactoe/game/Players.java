@@ -10,8 +10,8 @@ record Players(PlayerX playerX, PlayerO playerO, CurrentPlayer currentPlayer) {
       PlayerId playerX, PlayerId playerO, StartingPlayer startingPlayer) {
     var currentPlayer =
         switch (startingPlayer) {
-          case X -> CurrentPlayer.create(playerX);
-          case O -> CurrentPlayer.create(playerO);
+          case X -> CurrentPlayer.create(playerX, PlayerSymbol.X);
+          case O -> CurrentPlayer.create(playerO, PlayerSymbol.O);
         };
     return new Players(PlayerX.create(playerX), PlayerO.create(playerO), currentPlayer);
   }
@@ -20,15 +20,12 @@ record Players(PlayerX playerX, PlayerO playerO, CurrentPlayer currentPlayer) {
     return currentPlayer.hasId(playerId);
   }
 
-  public PlayerSymbol getSymbolForCurrentPlayer() {
-    return PlayerSymbol.X;
-  }
-
   public PlayerId getNextPlayer() {
     return currentPlayer.next(playerX, playerO);
   }
 
   public Players setNextPlayer(PlayerId playerId) {
-    return new Players(playerX, playerO, CurrentPlayer.create(playerId));
+    var symbol = playerId.equals(playerX.ref()) ? PlayerSymbol.X : PlayerSymbol.O;
+    return new Players(playerX, playerO, CurrentPlayer.create(playerId, symbol));
   }
 }

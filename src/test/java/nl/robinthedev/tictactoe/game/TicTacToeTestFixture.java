@@ -53,6 +53,10 @@ class TicTacToeTestFixture {
     return new SquareMarked(gameId, markedSquare, newGridState, annabel);
   }
 
+  public SquareMarked squareMarkedByAnnabel(MarkedSquare markedSquare, NewGridState newGridState) {
+    return new SquareMarked(gameId, markedSquare, newGridState, john);
+  }
+
   public MarkSquareRejectedNotThePlayersTurn itsNotAnnabelsTurnEvent() {
     return new MarkSquareRejectedNotThePlayersTurn(gameId, john, annabel);
   }
@@ -66,10 +70,14 @@ class TicTacToeTestFixture {
   }
 
   MarkSquare annabelMarksTopLeft() {
-    return new MarkSquare(gameId, annabel, SquareToMark.TOP_LEFT);
+    return annabelMarks(SquareToMark.TOP_LEFT);
   }
 
   public Players annabelsTurn() {
     return Players.createPlayers(john, annabel, StartingPlayer.O);
+  }
+
+  public MarkSquare annabelMarks(SquareToMark squareToMark) {
+    return new MarkSquare(gameId, annabel, squareToMark);
   }
 }
