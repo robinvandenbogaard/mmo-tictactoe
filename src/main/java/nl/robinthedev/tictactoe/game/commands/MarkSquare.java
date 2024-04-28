@@ -6,4 +6,6 @@ import nl.robinthedev.tictactoe.game.model.SquareToMark;
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 public record MarkSquare(
-    @TargetAggregateIdentifier GameId gameId, Player player, SquareToMark squareToMark) {}
+    @TargetAggregateIdentifier GameId gameId,
+    Player playerRequestingMarking,
+    SquareToMark squareToMark) {}

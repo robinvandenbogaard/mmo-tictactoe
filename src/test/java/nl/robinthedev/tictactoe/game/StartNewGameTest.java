@@ -1,7 +1,5 @@
 package nl.robinthedev.tictactoe.game;
 
-import static nl.robinthedev.tictactoe.game.TicTacToeTestFixture.ANNABEL_UUID;
-import static nl.robinthedev.tictactoe.game.TicTacToeTestFixture.JOHN_UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import nl.robinthedev.tictactoe.game.commands.StartNewGame;
@@ -43,13 +41,13 @@ class StartNewGameTest {
   void johnStartsBecauseHeIsPlayerX() {
     fixture
         .when(new StartNewGame(fixture.gameId, fixture.john, fixture.annabel))
-        .expectState(game -> assertThat(game.players.isPlayerTurn(JOHN_UUID)).isTrue());
+        .expectState(game -> assertThat(game.players.isPlayerTurn(fixture.john)).isTrue());
   }
 
   @Test
   void annabelStartsBecauseSheIsPlayerX() {
     fixture
         .when(new StartNewGame(fixture.gameId, fixture.annabel, fixture.john))
-        .expectState(game -> assertThat(game.players.isPlayerTurn(ANNABEL_UUID)).isTrue());
+        .expectState(game -> assertThat(game.players.isPlayerTurn(fixture.annabel)).isTrue());
   }
 }

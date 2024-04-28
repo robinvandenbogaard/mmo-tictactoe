@@ -4,6 +4,7 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 import nl.robinthedev.tictactoe.game.commands.MarkSquare;
 import nl.robinthedev.tictactoe.game.commands.StartNewGame;
+import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedNotThePlayersTurn;
 import nl.robinthedev.tictactoe.game.events.NewGameStarted;
 import nl.robinthedev.tictactoe.game.events.SquareMarked;
 import nl.robinthedev.tictactoe.game.model.GameId;
@@ -41,6 +42,14 @@ class TicTacToeGame {
 
   @CommandHandler
   void on(MarkSquare command) {
+    var player = command.playerRequestingMarking();
+    var currentPlayer = players.currentPlayer();
+
+    if (currentPlayer.isNotSame(player)) {
+      apply(new MarkSquareRejectedNotThePlayersTurn(gameId, currentPlayer.toPlayer(), player));
+      return;
+    }
+
     var markResult = grid.markSquare(command.squareToMark(), players.getSymbolForCurrentPlayer());
     apply(
         new SquareMarked(

@@ -1,6 +1,5 @@
 package nl.robinthedev.tictactoe.game;
 
-import static nl.robinthedev.tictactoe.game.TicTacToeTestFixture.ANNABEL_UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import nl.robinthedev.tictactoe.game.commands.MarkSquare;
@@ -37,6 +36,15 @@ class MarkSquareTest {
     fixture
         .given(fixture.newGameStarted())
         .when(new MarkSquare(fixture.gameId, fixture.john, SquareToMark.of(0, 0)))
-        .expectState(game -> assertThat(game.players.isPlayerTurn(ANNABEL_UUID)).isTrue());
+        .expectState(game -> assertThat(game.players.isPlayerTurn(fixture.annabel)).isTrue());
+  }
+
+  @Test
+  void annabelCannotMarkASquareInJohnsTurn() {
+    fixture
+        .given(fixture.newGameStarted())
+        .when(new MarkSquare(fixture.gameId, fixture.annabel, SquareToMark.of(0, 0)))
+        .expectEvents(fixture.itsNotAnnabelsTurnEvent())
+        .expectState(game -> assertThat(game.players.isPlayerTurn(fixture.john)).isTrue());
   }
 }

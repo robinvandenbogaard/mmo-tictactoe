@@ -1,6 +1,5 @@
 package nl.robinthedev.tictactoe.game;
 
-import java.util.UUID;
 import nl.robinthedev.tictactoe.game.model.Player;
 import nl.robinthedev.tictactoe.game.model.PlayerSymbol;
 import nl.robinthedev.tictactoe.game.model.StartingPlayer;
@@ -17,12 +16,16 @@ record Players(PlayerX playerX, PlayerO playerO, CurrentPlayer currentPlayer) {
     return new Players(PlayerX.create(playerX), PlayerO.create(playerO), currentPlayer);
   }
 
-  public boolean isPlayerTurn(UUID uuid) {
-    return currentPlayer.hasId(uuid);
+  public boolean isPlayerTurn(Player player) {
+    return currentPlayer.hasId(player.ref());
   }
 
   public PlayerSymbol getSymbolForCurrentPlayer() {
     return PlayerSymbol.X;
+  }
+
+  public Player getCurrentPlayer() {
+    return new Player(currentPlayer.playerId());
   }
 
   public Player getNextPlayer() {
@@ -31,5 +34,9 @@ record Players(PlayerX playerX, PlayerO playerO, CurrentPlayer currentPlayer) {
 
   public Players setNextPlayer(Player player) {
     return new Players(playerX, playerO, CurrentPlayer.create(player));
+  }
+
+  public boolean isNotPlayerTurn(Player player) {
+    return !isPlayerTurn(player);
   }
 }

@@ -1,6 +1,7 @@
 package nl.robinthedev.tictactoe.game;
 
 import java.util.UUID;
+import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedNotThePlayersTurn;
 import nl.robinthedev.tictactoe.game.events.NewGameStarted;
 import nl.robinthedev.tictactoe.game.events.SquareMarked;
 import nl.robinthedev.tictactoe.game.model.GameId;
@@ -42,5 +43,9 @@ class TicTacToeTestFixture {
 
   public SquareMarked squareMarkedByJohn(MarkedSquare markedSquare, NewGridState newGridState) {
     return new SquareMarked(gameId, markedSquare, newGridState, annabel);
+  }
+
+  public MarkSquareRejectedNotThePlayersTurn itsNotAnnabelsTurnEvent() {
+    return new MarkSquareRejectedNotThePlayersTurn(gameId, john, annabel);
   }
 }

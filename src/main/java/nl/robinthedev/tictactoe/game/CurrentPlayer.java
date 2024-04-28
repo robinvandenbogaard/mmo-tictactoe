@@ -20,4 +20,12 @@ record CurrentPlayer(UUID playerId) {
       return new Player(playerX.uuid());
     }
   }
+
+  public boolean isNotSame(Player player) {
+    return !playerId.equals(player.ref());
+  }
+
+  public Player toPlayer() {
+    return new Player(playerId);
+  }
 }
