@@ -4,7 +4,6 @@ import static nl.robinthedev.tictactoe.game.TicTacToeTestFixture.ANNABEL_UUID;
 import static nl.robinthedev.tictactoe.game.TicTacToeTestFixture.JOHN_UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.UUID;
 import nl.robinthedev.tictactoe.game.commands.StartNewGame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,21 +43,13 @@ class StartNewGameTest {
   void johnStartsBecauseHeIsPlayerX() {
     fixture
         .when(new StartNewGame(fixture.gameId, fixture.john, fixture.annabel))
-        .expectState(
-            game -> {
-              UUID uuid = UUID.fromString(JOHN_UUID);
-              assertThat(game.players.isPlayerTurn(uuid)).isTrue();
-            });
+        .expectState(game -> assertThat(game.players.isPlayerTurn(JOHN_UUID)).isTrue());
   }
 
   @Test
   void annabelStartsBecauseSheIsPlayerX() {
     fixture
         .when(new StartNewGame(fixture.gameId, fixture.annabel, fixture.john))
-        .expectState(
-            game -> {
-              UUID uuid = UUID.fromString(ANNABEL_UUID);
-              assertThat(game.players.isPlayerTurn(uuid)).isTrue();
-            });
+        .expectState(game -> assertThat(game.players.isPlayerTurn(ANNABEL_UUID)).isTrue());
   }
 }

@@ -3,7 +3,6 @@ package nl.robinthedev.tictactoe.game;
 import static nl.robinthedev.tictactoe.game.TicTacToeTestFixture.ANNABEL_UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.UUID;
 import nl.robinthedev.tictactoe.game.commands.MarkSquare;
 import nl.robinthedev.tictactoe.game.model.MarkedSquare;
 import nl.robinthedev.tictactoe.game.model.PlayerSymbol;
@@ -38,7 +37,6 @@ class MarkSquareTest {
     fixture
         .given(fixture.newGameStarted())
         .when(new MarkSquare(fixture.gameId, fixture.john, SquareToMark.of(0, 0)))
-        .expectState(
-            game -> assertThat(game.players.isPlayerTurn(UUID.fromString(ANNABEL_UUID))).isTrue());
+        .expectState(game -> assertThat(game.players.isPlayerTurn(ANNABEL_UUID)).isTrue());
   }
 }
