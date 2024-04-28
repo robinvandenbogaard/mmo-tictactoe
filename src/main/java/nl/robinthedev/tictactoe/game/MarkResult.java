@@ -1,5 +1,10 @@
 package nl.robinthedev.tictactoe.game;
 
-record MarkResult(
-    nl.robinthedev.tictactoe.game.model.MarkedSquare markedSquare,
-    nl.robinthedev.tictactoe.game.model.NewGridState newGridState) {}
+import nl.robinthedev.tictactoe.game.model.MarkedSquare;
+import nl.robinthedev.tictactoe.game.model.NewGridState;
+
+sealed interface MarkResult permits MarkResult.SquareAlreadyMarked, MarkResult.ValidMarking {
+  record ValidMarking(MarkedSquare markedSquare, NewGridState newGridState) implements MarkResult {}
+
+  record SquareAlreadyMarked() implements MarkResult {}
+}

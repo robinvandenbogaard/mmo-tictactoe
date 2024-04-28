@@ -5,6 +5,8 @@ import static nl.robinthedev.tictactoe.game.model.SquareSymbol.EMPTY;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import nl.robinthedev.tictactoe.game.MarkResult.SquareAlreadyMarked;
+import nl.robinthedev.tictactoe.game.MarkResult.ValidMarking;
 import nl.robinthedev.tictactoe.game.model.MarkedSquare;
 import nl.robinthedev.tictactoe.game.model.NewGridState;
 import nl.robinthedev.tictactoe.game.model.PlayerSymbol;
@@ -38,8 +40,12 @@ record Grid(List<SquareSymbol> squares) {
 
   public MarkResult markSquare(SquareToMark squareToMark, PlayerSymbol symbol) {
     var position = getPosition(squareToMark);
+    if (!squares.get(position).equals(EMPTY)) {
+      return new SquareAlreadyMarked();
+    }
+
     var updatedSquares = updateSquares(position, symbol);
-    return new MarkResult(
+    return new ValidMarking(
         new MarkedSquare(squareToMark.column(), squareToMark.row(), symbol),
         new NewGridState(updatedSquares));
   }

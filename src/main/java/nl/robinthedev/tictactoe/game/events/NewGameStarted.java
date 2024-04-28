@@ -5,7 +5,8 @@ import nl.robinthedev.tictactoe.game.model.PlayerId;
 import nl.robinthedev.tictactoe.game.model.StartingPlayer;
 
 public record NewGameStarted(
-    GameId gameId, PlayerId playerX, PlayerId playerO, StartingPlayer startingPlayer) {
+    GameId gameId, PlayerId playerX, PlayerId playerO, StartingPlayer startingPlayer)
+    implements TicTacToeEvent {
 
   public static NewGameStarted withPlayerXStarting(
       GameId gameId, PlayerId playerX, PlayerId playerO) {

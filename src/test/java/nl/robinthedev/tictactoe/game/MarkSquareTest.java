@@ -2,7 +2,6 @@ package nl.robinthedev.tictactoe.game;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import nl.robinthedev.tictactoe.game.commands.MarkSquare;
 import nl.robinthedev.tictactoe.game.model.MarkedSquare;
 import nl.robinthedev.tictactoe.game.model.PlayerSymbol;
 import nl.robinthedev.tictactoe.game.model.SquareToMark;
@@ -24,18 +23,19 @@ class MarkSquareTest {
 
     fixture
         .given(fixture.newGameStarted())
-        .when(new MarkSquare(fixture.gameId, fixture.john, SquareToMark.of(0, 0)))
+        .when(fixture.johnMarksTopLeft())
         .expectEvents(
             fixture.squareMarkedByJohn(
-                MarkedSquare.of(0, 0, PlayerSymbol.X), expectedGrid.toNewGridState()))
+                MarkedSquare.of(SquareToMark.TOP_LEFT, PlayerSymbol.X),
+                expectedGrid.toNewGridState()))
         .expectState(game -> assertThat(game.grid).isEqualTo(expectedGrid));
   }
 
   @Test
-  void updatesTheCurrentPlayer() {
+  void updatesTheCurrentPlayerToAnnabel() {
     fixture
         .given(fixture.newGameStarted())
-        .when(new MarkSquare(fixture.gameId, fixture.john, SquareToMark.of(0, 0)))
+        .when(fixture.johnMarksTopLeft())
         .expectState(game -> assertThat(game.players.isPlayerTurn(fixture.annabel)).isTrue());
   }
 
@@ -43,8 +43,23 @@ class MarkSquareTest {
   void annabelCannotMarkASquareInJohnsTurn() {
     fixture
         .given(fixture.newGameStarted())
-        .when(new MarkSquare(fixture.gameId, fixture.annabel, SquareToMark.of(0, 0)))
+        .when(fixture.annabelMarksTopLeft())
         .expectEvents(fixture.itsNotAnnabelsTurnEvent())
         .expectState(game -> assertThat(game.players.isPlayerTurn(fixture.john)).isTrue());
+  }
+
+  @Test
+  void annabelCannotMarkASquareThatJohnAlreadyMarked() {
+    var expectedGrid = Grid.fromString("x,-,-,-,-,-,-,-,-");
+    var initialState = new TicTacToeGame();
+    initialState.gameId = fixture.gameId;
+    initialState.grid = expectedGrid;
+    initialState.players = fixture.annabelsTurn();
+
+    fixture
+        .givenState(() -> initialState)
+        .when(fixture.annabelMarksTopLeft())
+        .expectEvents(fixture.squareIsAlreadyMarkedEvent())
+        .expectState(game -> assertThat(game.players.isPlayerTurn(fixture.annabel)).isTrue());
   }
 }

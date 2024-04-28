@@ -2,12 +2,17 @@ package nl.robinthedev.tictactoe.game;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
+import nl.robinthedev.tictactoe.game.MarkResult.SquareAlreadyMarked;
+import nl.robinthedev.tictactoe.game.MarkResult.ValidMarking;
 import nl.robinthedev.tictactoe.game.commands.MarkSquare;
 import nl.robinthedev.tictactoe.game.commands.StartNewGame;
 import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedNotThePlayersTurn;
+import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedSquareAlreadyTaken;
 import nl.robinthedev.tictactoe.game.events.NewGameStarted;
 import nl.robinthedev.tictactoe.game.events.SquareMarked;
+import nl.robinthedev.tictactoe.game.events.TicTacToeEvent;
 import nl.robinthedev.tictactoe.game.model.GameId;
+import nl.robinthedev.tictactoe.game.model.PlayerId;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateCreationPolicy;
@@ -51,9 +56,15 @@ class TicTacToeGame {
     }
 
     var markResult = grid.markSquare(command.squareToMark(), players.getSymbolForCurrentPlayer());
-    apply(
-        new SquareMarked(
-            gameId, markResult.markedSquare(), markResult.newGridState(), players.getNextPlayer()));
+    apply(toEvent(markResult, player));
+  }
+
+  private TicTacToeEvent toEvent(MarkResult markResult, PlayerId player) {
+    return switch (markResult) {
+      case ValidMarking(var square, var gridState) ->
+              new SquareMarked(gameId, square, gridState, players.getNextPlayer());
+      case SquareAlreadyMarked() -> new MarkSquareRejectedSquareAlreadyTaken(gameId, player);
+    };
   }
 
   @EventSourcingHandler
