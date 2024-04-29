@@ -54,13 +54,15 @@ class TicTacToeGame {
     var player = command.playerRequestingMarking();
     var currentPlayer = players.currentPlayer();
     if (currentPlayer.isNot(player)) {
-      apply(new MarkSquareRejectedNotThePlayersTurn(gameId, currentPlayer.ref(), player));
+      apply(
+          new MarkSquareRejectedNotThePlayersTurn(
+              gameId, currentPlayer.ref(), player, grid.toNewGridState()));
       return;
     }
 
     var squareToMark = command.squareToMark();
     if (grid.isSquareMarked(squareToMark)) {
-      apply(new MarkSquareRejectedSquareAlreadyTaken(gameId, player));
+      apply(new MarkSquareRejectedSquareAlreadyTaken(gameId, player, grid.toNewGridState()));
       return;
     }
 

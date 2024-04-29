@@ -61,12 +61,12 @@ class TicTacToeTestFixture {
         john);
   }
 
-  public MarkSquareRejectedNotThePlayersTurn itsNotAnnabelsTurnEvent() {
-    return new MarkSquareRejectedNotThePlayersTurn(gameId, john, annabel);
+  public MarkSquareRejectedNotThePlayersTurn itsNotAnnabelsTurnEvent(Grid grid) {
+    return new MarkSquareRejectedNotThePlayersTurn(gameId, john, annabel, grid.toNewGridState());
   }
 
-  public MarkSquareRejectedSquareAlreadyTaken squareIsAlreadyMarkedEvent() {
-    return new MarkSquareRejectedSquareAlreadyTaken(gameId, annabel);
+  public MarkSquareRejectedSquareAlreadyTaken squareIsAlreadyMarkedEvent(Grid grid) {
+    return new MarkSquareRejectedSquareAlreadyTaken(gameId, annabel, grid.toNewGridState());
   }
 
   public GameWon gameWonByJohnEvent() {

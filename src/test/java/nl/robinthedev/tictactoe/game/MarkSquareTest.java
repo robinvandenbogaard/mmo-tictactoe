@@ -48,7 +48,7 @@ class MarkSquareTest {
     fixture
         .given(fixture.newGameStartedEvent())
         .when(new MarkSquare(fixture.gameId, fixture.annabel, SquareToMark.TOP_LEFT))
-        .expectEvents(fixture.itsNotAnnabelsTurnEvent());
+        .expectEvents(fixture.itsNotAnnabelsTurnEvent(Grid.empty()));
   }
 
   @Test
@@ -59,7 +59,7 @@ class MarkSquareTest {
             fixture.squareMarkedByJohnEvent(
                 SquareToMark.TOP_LEFT, Grid.fromString("x,-,-,-,-,-,-,-,-")))
         .when(new MarkSquare(fixture.gameId, fixture.annabel, SquareToMark.TOP_LEFT))
-        .expectEvents(fixture.squareIsAlreadyMarkedEvent());
+        .expectEvents(fixture.squareIsAlreadyMarkedEvent(Grid.fromString("x,-,-,-,-,-,-,-,-")));
   }
 
   @Test
