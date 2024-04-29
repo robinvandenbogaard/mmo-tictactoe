@@ -86,8 +86,7 @@ class MarkSquareTest {
         .expectEvents(
             fixture.squareMarkedByJohnEvent(
                 SquareToMark.BOTTOM_LEFT, Grid.fromString("x,o,-,x,o,-,x,-,-")),
-            fixture.gameWonByJohnEvent(),
-            fixture.gameLostByAnnabelEvent());
+            fixture.gameWonByJohnEvent());
   }
 
   @Test

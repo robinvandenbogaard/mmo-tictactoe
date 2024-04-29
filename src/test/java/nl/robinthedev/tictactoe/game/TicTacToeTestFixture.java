@@ -2,8 +2,7 @@ package nl.robinthedev.tictactoe.game;
 
 import java.util.UUID;
 import nl.robinthedev.tictactoe.game.events.GameDraw;
-import nl.robinthedev.tictactoe.game.events.GameLost;
-import nl.robinthedev.tictactoe.game.events.GameWon;
+import nl.robinthedev.tictactoe.game.events.GameFinished;
 import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedNotThePlayersTurn;
 import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedSquareAlreadyTaken;
 import nl.robinthedev.tictactoe.game.events.NewGameStarted;
@@ -69,12 +68,8 @@ class TicTacToeTestFixture {
     return new MarkSquareRejectedSquareAlreadyTaken(gameId, annabel, grid.toNewGridState());
   }
 
-  public GameWon gameWonByJohnEvent() {
-    return new GameWon(gameId, john);
-  }
-
-  public GameLost gameLostByAnnabelEvent() {
-    return new GameLost(gameId, annabel);
+  public GameFinished gameWonByJohnEvent() {
+    return new GameFinished(gameId, PlayerSymbol.X, john, annabel);
   }
 
   public GameDraw gameEndedInDrawEvent() {
