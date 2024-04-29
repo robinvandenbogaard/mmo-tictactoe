@@ -1,3 +1,5 @@
 package nl.robinthedev.tictactoe.game.model;
 
-public record NewGridState(java.util.List<SquareSymbol> squares) {}
+import java.util.List;
+
+public record NewGridState(List<SquareSymbol> squares) {}

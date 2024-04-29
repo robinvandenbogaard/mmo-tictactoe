@@ -45,17 +45,20 @@ class TicTacToeTestFixture {
     return new NewGameStarted(gameId, john, annabel, startingPlayer);
   }
 
-  public SquareMarked squareMarkedByJohnEvent(SquareToMark squareToMark, Grid expectedGrid) {
+  public SquareMarked squareMarkedByJohnEvent(SquareToMark squareToMark, Grid resultingGrid) {
     return new SquareMarked(
         gameId,
         MarkedSquare.of(squareToMark, PlayerSymbol.X),
-        expectedGrid.toNewGridState(),
+        resultingGrid.toNewGridState(),
         annabel);
   }
 
-  public SquareMarked squareMarkedByAnnabelEvent(SquareToMark squareToMark, Grid expectedGrid) {
+  public SquareMarked squareMarkedByAnnabelEvent(SquareToMark squareToMark, Grid resultingGrid) {
     return new SquareMarked(
-        gameId, MarkedSquare.of(squareToMark, PlayerSymbol.O), expectedGrid.toNewGridState(), john);
+        gameId,
+        MarkedSquare.of(squareToMark, PlayerSymbol.O),
+        resultingGrid.toNewGridState(),
+        john);
   }
 
   public MarkSquareRejectedNotThePlayersTurn itsNotAnnabelsTurnEvent() {
