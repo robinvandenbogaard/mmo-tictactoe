@@ -102,4 +102,22 @@ class MarkSquareTest {
                 SquareToMark.BOTTOM_RIGHT, Grid.fromString("x,x,o,o,o,x,x,o,x")),
             fixture.gameEndedInDrawEvent());
   }
+
+  @Test
+  void cannotMarkASquareOnAFinishedGameInDraw() {
+    fixture
+        .given(fixture.newGameStartedEvent(StartingPlayer.O))
+        .andGiven(fixture.gameEndedInDrawEvent())
+        .when(new MarkSquare(fixture.gameId, fixture.john, SquareToMark.BOTTOM_RIGHT))
+        .expectEvents(fixture.gameIsOverEvent());
+  }
+
+  @Test
+  void cannotMarkASquareOnAFinishedGameWithWinner() {
+    fixture
+        .given(fixture.newGameStartedEvent(StartingPlayer.O))
+        .andGiven(fixture.gameWonByJohnEvent())
+        .when(new MarkSquare(fixture.gameId, fixture.john, SquareToMark.BOTTOM_RIGHT))
+        .expectEvents(fixture.gameIsOverEvent());
+  }
 }

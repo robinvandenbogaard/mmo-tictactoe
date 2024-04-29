@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import nl.robinthedev.tictactoe.game.commands.MarkSquare;
 import nl.robinthedev.tictactoe.game.commands.StartNewGame;
 import nl.robinthedev.tictactoe.game.events.GameDraw;
-import nl.robinthedev.tictactoe.game.events.GameLost;
-import nl.robinthedev.tictactoe.game.events.GameWon;
+import nl.robinthedev.tictactoe.game.events.GameFinished;
+import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedGameIsOver;
 import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedNotThePlayersTurn;
 import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedSquareAlreadyTaken;
 import nl.robinthedev.tictactoe.game.events.NewGameStarted;
@@ -30,6 +30,7 @@ class TicTacToeGame {
   @AggregateIdentifier GameId gameId;
   Players players;
   Grid grid;
+  boolean gameOver = false;
 
   public TicTacToeGame() {
     // required by Axon Framework
@@ -51,6 +52,13 @@ class TicTacToeGame {
 
   @CommandHandler
   void on(MarkSquare command) {
+    if (gameOver) {
+      apply(
+          new MarkSquareRejectedGameIsOver(
+              gameId, command.playerRequestingMarking(), grid.toNewGridState()));
+      return;
+    }
+
     var player = command.playerRequestingMarking();
     var currentPlayer = players.currentPlayer();
     if (currentPlayer.isNot(player)) {
@@ -84,8 +92,8 @@ class TicTacToeGame {
     events.add(squareMarked);
 
     if (updatedGrid.hasWinner()) {
-      events.add(new GameWon(gameId, currentPlayer.ref()));
-      events.add(new GameLost(gameId, nextPlayer));
+      events.add(
+          new GameFinished(gameId, currentPlayer.playerSymbol(), currentPlayer.ref(), nextPlayer));
     } else if (updatedGrid.isFullGrid()) {
       events.add(new GameDraw(gameId, players.playerX().ref(), players.playerO().ref()));
     }
@@ -96,5 +104,15 @@ class TicTacToeGame {
   void handle(SquareMarked event) {
     grid = Grid.from(event.gridState());
     players = players.setNextPlayer(event.nextPlayer());
+  }
+
+  @EventSourcingHandler
+  void handle(GameFinished event) {
+    gameOver = true;
+  }
+
+  @EventSourcingHandler
+  void handle(GameDraw event) {
+    gameOver = true;
   }
 }
