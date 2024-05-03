@@ -13,4 +13,8 @@ public enum SquareSymbol {
       default -> throw new IllegalStateException("Unexpected value: " + input);
     };
   }
+
+  public boolean isEmpty() {
+    return this.equals(EMPTY);
+  }
 }

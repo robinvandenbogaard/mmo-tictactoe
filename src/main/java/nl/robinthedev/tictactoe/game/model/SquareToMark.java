@@ -23,4 +23,10 @@ public record SquareToMark(int column, int row) {
     }
     return new SquareToMark(column, row);
   }
+
+  public static SquareToMark fromIndex(int index) {
+    var column = index % 3;
+    var row = index / 3;
+    return new SquareToMark(column, row);
+  }
 }
