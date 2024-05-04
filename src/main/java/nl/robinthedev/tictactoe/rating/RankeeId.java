@@ -1,7 +1,7 @@
 package nl.robinthedev.tictactoe.rating;
 
 import java.util.UUID;
-import nl.robinthedev.tictactoe.game.model.PlayerId;
+import nl.robinthedev.tictactoe.messaging.game.PlayerId;
 import nl.robinthedev.tictactoe.player.model.AccountId;
 
 record RankeeId(UUID uuid) {

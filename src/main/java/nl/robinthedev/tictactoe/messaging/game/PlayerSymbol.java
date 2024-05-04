@@ -1,4 +1,4 @@
-package nl.robinthedev.tictactoe.game.model;
+package nl.robinthedev.tictactoe.messaging.game;
 
 public enum PlayerSymbol {
   X,

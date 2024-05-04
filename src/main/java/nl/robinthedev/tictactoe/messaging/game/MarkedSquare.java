@@ -1,4 +1,4 @@
-package nl.robinthedev.tictactoe.game.model;
+package nl.robinthedev.tictactoe.messaging.game;
 
 public record MarkedSquare(int column, int row, PlayerSymbol symbol) {
   public static MarkedSquare of(SquareToMark squareToMark, PlayerSymbol symbol) {

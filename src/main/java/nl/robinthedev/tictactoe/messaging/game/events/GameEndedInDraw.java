@@ -1,7 +1,7 @@
-package nl.robinthedev.tictactoe.game.events;
+package nl.robinthedev.tictactoe.messaging.game.events;
 
-import nl.robinthedev.tictactoe.game.model.GameId;
-import nl.robinthedev.tictactoe.game.model.PlayerId;
+import nl.robinthedev.tictactoe.messaging.game.GameId;
+import nl.robinthedev.tictactoe.messaging.game.PlayerId;
 import org.axonframework.serialization.Revision;
 
 @Revision("2")

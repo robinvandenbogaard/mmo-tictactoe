@@ -1,7 +1,7 @@
 package nl.robinthedev.tictactoe.games;
 
-import nl.robinthedev.tictactoe.game.model.GameId;
-import nl.robinthedev.tictactoe.game.model.PlayerId;
+import nl.robinthedev.tictactoe.messaging.game.GameId;
+import nl.robinthedev.tictactoe.messaging.game.PlayerId;
 import nl.robinthedev.tictactoe.games.model.RunningGames;
 
 interface Games {

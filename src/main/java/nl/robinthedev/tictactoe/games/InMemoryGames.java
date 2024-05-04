@@ -2,8 +2,8 @@ package nl.robinthedev.tictactoe.games;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import nl.robinthedev.tictactoe.game.model.GameId;
-import nl.robinthedev.tictactoe.game.model.PlayerId;
+import nl.robinthedev.tictactoe.messaging.game.GameId;
+import nl.robinthedev.tictactoe.messaging.game.PlayerId;
 import nl.robinthedev.tictactoe.games.model.RunningGame;
 import nl.robinthedev.tictactoe.games.model.RunningGames;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package nl.robinthedev.tictactoe.game;
 
-import nl.robinthedev.tictactoe.game.model.PlayerId;
+import nl.robinthedev.tictactoe.messaging.game.PlayerId;
 
 record PlayerO(PlayerId ref) {
 

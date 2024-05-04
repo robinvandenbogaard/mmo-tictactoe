@@ -1,8 +1,8 @@
 package nl.robinthedev.tictactoe.game;
 
-import nl.robinthedev.tictactoe.game.model.PlayerId;
-import nl.robinthedev.tictactoe.game.model.PlayerSymbol;
-import nl.robinthedev.tictactoe.game.model.StartingPlayer;
+import nl.robinthedev.tictactoe.messaging.game.PlayerId;
+import nl.robinthedev.tictactoe.messaging.game.PlayerSymbol;
+import nl.robinthedev.tictactoe.messaging.game.StartingPlayer;
 
 record Players(PlayerX playerX, PlayerO playerO, CurrentPlayer currentPlayer) {
 

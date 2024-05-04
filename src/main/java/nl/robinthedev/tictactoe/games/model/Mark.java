@@ -1,6 +1,6 @@
 package nl.robinthedev.tictactoe.games.model;
 
-import nl.robinthedev.tictactoe.game.model.SquareSymbol;
+import nl.robinthedev.tictactoe.messaging.game.SquareSymbol;
 
 public enum Mark {
   X,

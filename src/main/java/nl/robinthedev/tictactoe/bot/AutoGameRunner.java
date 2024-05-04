@@ -2,12 +2,12 @@ package nl.robinthedev.tictactoe.bot;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import nl.robinthedev.tictactoe.game.commands.MarkSquare;
-import nl.robinthedev.tictactoe.game.commands.StartNewGame;
-import nl.robinthedev.tictactoe.game.model.GameId;
-import nl.robinthedev.tictactoe.game.model.NewGridState;
-import nl.robinthedev.tictactoe.game.model.PlayerId;
-import nl.robinthedev.tictactoe.game.model.SquareSymbol;
+import nl.robinthedev.tictactoe.messaging.game.commands.MarkSquare;
+import nl.robinthedev.tictactoe.messaging.game.commands.StartNewGame;
+import nl.robinthedev.tictactoe.messaging.game.GameId;
+import nl.robinthedev.tictactoe.messaging.game.NewGridState;
+import nl.robinthedev.tictactoe.messaging.game.PlayerId;
+import nl.robinthedev.tictactoe.messaging.game.SquareSymbol;
 import nl.robinthedev.tictactoe.games.model.Grid;
 import nl.robinthedev.tictactoe.games.model.RunningGames;
 import nl.robinthedev.tictactoe.games.queries.FetchRunningGames;

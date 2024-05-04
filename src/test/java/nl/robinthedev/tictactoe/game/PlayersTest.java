@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.UUID;
-import nl.robinthedev.tictactoe.game.model.PlayerId;
-import nl.robinthedev.tictactoe.game.model.StartingPlayer;
+import nl.robinthedev.tictactoe.messaging.game.PlayerId;
+import nl.robinthedev.tictactoe.messaging.game.StartingPlayer;
 import org.junit.jupiter.api.Test;
 
 class PlayersTest {

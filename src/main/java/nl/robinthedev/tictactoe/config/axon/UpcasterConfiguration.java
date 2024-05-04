@@ -1,6 +1,6 @@
 package nl.robinthedev.tictactoe.config.axon;
 
-import nl.robinthedev.tictactoe.game.events.GameEndedInDraw;
+import nl.robinthedev.tictactoe.messaging.game.events.GameEndedInDraw;
 import org.axonframework.serialization.upcasting.event.EventTypeUpcaster;
 import org.axonframework.serialization.upcasting.event.EventUpcasterChain;
 import org.slf4j.Logger;
