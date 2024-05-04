@@ -1,4 +1,4 @@
-package nl.robinthedev.tictactoe.games;
+package nl.robinthedev.tictactoe.lobby;
 
 import nl.robinthedev.tictactoe.messaging.game.events.GameEndedInDraw;
 import nl.robinthedev.tictactoe.messaging.game.events.GameFinished;

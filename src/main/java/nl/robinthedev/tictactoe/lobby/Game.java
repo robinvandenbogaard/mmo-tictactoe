@@ -1,13 +1,13 @@
-package nl.robinthedev.tictactoe.games;
+package nl.robinthedev.tictactoe.lobby;
 
 import java.util.List;
-import nl.robinthedev.tictactoe.messaging.game.events.NewGameStarted;
 import nl.robinthedev.tictactoe.messaging.game.GameId;
 import nl.robinthedev.tictactoe.messaging.game.NewGridState;
 import nl.robinthedev.tictactoe.messaging.game.PlayerId;
 import nl.robinthedev.tictactoe.messaging.game.StartingPlayer;
-import nl.robinthedev.tictactoe.games.model.Grid;
-import nl.robinthedev.tictactoe.games.model.Mark;
+import nl.robinthedev.tictactoe.messaging.game.events.NewGameStarted;
+import nl.robinthedev.tictactoe.messaging.lobby.Grid;
+import nl.robinthedev.tictactoe.messaging.lobby.Mark;
 
 record Game(GameId id, List<PlayerId> players, PlayerId currentPlayer, Grid grid) {
   public static Game of(NewGameStarted event) {

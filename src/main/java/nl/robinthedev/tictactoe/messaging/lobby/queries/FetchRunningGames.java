@@ -1,4 +1,4 @@
-package nl.robinthedev.tictactoe.games.queries;
+package nl.robinthedev.tictactoe.messaging.lobby.queries;
 
 import nl.robinthedev.tictactoe.messaging.game.PlayerId;
 

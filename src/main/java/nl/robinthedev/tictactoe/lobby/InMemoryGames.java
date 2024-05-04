@@ -1,11 +1,11 @@
-package nl.robinthedev.tictactoe.games;
+package nl.robinthedev.tictactoe.lobby;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import nl.robinthedev.tictactoe.messaging.game.GameId;
 import nl.robinthedev.tictactoe.messaging.game.PlayerId;
-import nl.robinthedev.tictactoe.games.model.RunningGame;
-import nl.robinthedev.tictactoe.games.model.RunningGames;
+import nl.robinthedev.tictactoe.messaging.lobby.RunningGame;
+import nl.robinthedev.tictactoe.messaging.lobby.RunningGames;
 import org.springframework.stereotype.Service;
 
 @Service

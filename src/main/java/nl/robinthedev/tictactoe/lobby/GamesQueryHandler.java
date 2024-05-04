@@ -1,7 +1,7 @@
-package nl.robinthedev.tictactoe.games;
+package nl.robinthedev.tictactoe.lobby;
 
-import nl.robinthedev.tictactoe.games.model.RunningGames;
-import nl.robinthedev.tictactoe.games.queries.FetchRunningGames;
+import nl.robinthedev.tictactoe.messaging.lobby.RunningGames;
+import nl.robinthedev.tictactoe.messaging.lobby.queries.FetchRunningGames;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.stereotype.Service;
 

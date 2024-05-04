@@ -1,4 +1,4 @@
-package nl.robinthedev.tictactoe.games.model;
+package nl.robinthedev.tictactoe.messaging.lobby;
 
 import java.util.List;
 import nl.robinthedev.tictactoe.messaging.game.PlayerId;

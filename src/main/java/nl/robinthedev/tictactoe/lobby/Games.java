@@ -1,8 +1,8 @@
-package nl.robinthedev.tictactoe.games;
+package nl.robinthedev.tictactoe.lobby;
 
 import nl.robinthedev.tictactoe.messaging.game.GameId;
 import nl.robinthedev.tictactoe.messaging.game.PlayerId;
-import nl.robinthedev.tictactoe.games.model.RunningGames;
+import nl.robinthedev.tictactoe.messaging.lobby.RunningGames;
 
 interface Games {
   void gameStarted(Game game);
