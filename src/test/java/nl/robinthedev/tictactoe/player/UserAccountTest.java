@@ -7,7 +7,7 @@ import nl.robinthedev.tictactoe.player.commands.UpdateUserName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class PlayerTest {
+class UserAccountTest {
 
   PlayerTestFixture fixture;
 
@@ -19,11 +19,11 @@ class PlayerTest {
   @Test
   void createsAccount() {
     fixture
-        .when(new CreateAccount(fixture.playerId, fixture.firstGenUsername))
+        .when(new CreateAccount(fixture.accountId, fixture.firstGenUsername))
         .expectEvents(fixture.accountCreatedEvent())
         .expectState(
             player -> {
-              assertThat(player.playerId).isEqualTo(fixture.playerId);
+              assertThat(player.accountId).isEqualTo(fixture.accountId);
               assertThat(player.username).isEqualTo(fixture.firstGenUsername);
             });
   }
@@ -32,7 +32,7 @@ class PlayerTest {
   void canUpdateUsername() {
     fixture
         .given(fixture.accountCreatedEvent())
-        .when(new UpdateUserName(fixture.playerId, fixture.chosenUsername))
+        .when(new UpdateUserName(fixture.accountId, fixture.chosenUsername))
         .expectEvents(fixture.usernameUpdatedEvent())
         .expectState(player -> assertThat(player.username).isEqualTo(fixture.chosenUsername));
   }

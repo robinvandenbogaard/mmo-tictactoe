@@ -6,7 +6,7 @@ import nl.robinthedev.tictactoe.player.commands.CreateAccount;
 import nl.robinthedev.tictactoe.player.commands.UpdateUserName;
 import nl.robinthedev.tictactoe.player.events.AccountCreated;
 import nl.robinthedev.tictactoe.player.events.UsernameUpdated;
-import nl.robinthedev.tictactoe.player.model.PlayerId;
+import nl.robinthedev.tictactoe.player.model.AccountId;
 import nl.robinthedev.tictactoe.player.model.Username;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -16,30 +16,30 @@ import org.axonframework.modelling.command.CreationPolicy;
 import org.axonframework.spring.stereotype.Aggregate;
 
 @Aggregate
-class Player {
+class UserAccount {
 
-  @AggregateIdentifier PlayerId playerId;
+  @AggregateIdentifier AccountId accountId;
   Username username;
 
-  public Player() {
+  public UserAccount() {
     // Required by Axon Framework
   }
 
   @CommandHandler
   @CreationPolicy(AggregateCreationPolicy.ALWAYS)
   void on(CreateAccount command) {
-    apply(new AccountCreated(command.playerId(), command.username()));
+    apply(new AccountCreated(command.accountId(), command.username()));
   }
 
   @EventSourcingHandler
   void handle(AccountCreated event) {
-    this.playerId = event.playerId();
+    this.accountId = event.accountId();
     this.username = event.username();
   }
 
   @CommandHandler
   void on(UpdateUserName command) {
-    apply(new UsernameUpdated(command.playerId(), command.desiredUsername(), username));
+    apply(new UsernameUpdated(command.accountId(), command.desiredUsername(), username));
   }
 
   @EventSourcingHandler

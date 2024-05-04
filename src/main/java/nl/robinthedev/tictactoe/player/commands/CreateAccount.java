@@ -1,6 +1,6 @@
 package nl.robinthedev.tictactoe.player.commands;
 
-import nl.robinthedev.tictactoe.player.model.PlayerId;
+import nl.robinthedev.tictactoe.player.model.AccountId;
 import nl.robinthedev.tictactoe.player.model.Username;
 
-public record CreateAccount(PlayerId playerId, Username username) {}
+public record CreateAccount(AccountId accountId, Username username) {}
