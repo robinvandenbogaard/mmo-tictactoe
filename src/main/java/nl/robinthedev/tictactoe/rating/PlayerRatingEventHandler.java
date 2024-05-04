@@ -1,8 +1,8 @@
 package nl.robinthedev.tictactoe.rating;
 
-import nl.robinthedev.tictactoe.messaging.game.events.GameEndedInDraw;
-import nl.robinthedev.tictactoe.messaging.game.events.GameFinished;
-import nl.robinthedev.tictactoe.player.events.AccountCreated;
+import nl.robinthedev.tictactoe.account.api.events.AccountCreated;
+import nl.robinthedev.tictactoe.game.api.events.GameEndedInDraw;
+import nl.robinthedev.tictactoe.game.api.events.GameFinished;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.slf4j.Logger;

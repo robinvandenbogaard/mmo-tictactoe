@@ -2,7 +2,7 @@ package nl.robinthedev.tictactoe.game;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import nl.robinthedev.tictactoe.messaging.game.commands.StartNewGame;
+import nl.robinthedev.tictactoe.game.api.commands.StartNewGame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

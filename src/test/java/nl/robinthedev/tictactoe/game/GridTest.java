@@ -1,15 +1,15 @@
 package nl.robinthedev.tictactoe.game;
 
-import static nl.robinthedev.tictactoe.messaging.game.SquareSymbol.EMPTY;
-import static nl.robinthedev.tictactoe.messaging.game.SquareSymbol.O;
-import static nl.robinthedev.tictactoe.messaging.game.SquareSymbol.X;
+import static nl.robinthedev.tictactoe.game.api.SquareSymbol.EMPTY;
+import static nl.robinthedev.tictactoe.game.api.SquareSymbol.O;
+import static nl.robinthedev.tictactoe.game.api.SquareSymbol.X;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import java.util.stream.Stream;
-import nl.robinthedev.tictactoe.messaging.game.PlayerSymbol;
-import nl.robinthedev.tictactoe.messaging.game.SquareToMark;
+import nl.robinthedev.tictactoe.game.api.PlayerSymbol;
+import nl.robinthedev.tictactoe.game.api.SquareToMark;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

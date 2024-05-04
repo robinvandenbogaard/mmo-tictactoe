@@ -1,16 +1,16 @@
 package nl.robinthedev.tictactoe.game;
 
-import static nl.robinthedev.tictactoe.messaging.game.SquareSymbol.EMPTY;
+import static nl.robinthedev.tictactoe.game.api.SquareSymbol.EMPTY;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import nl.robinthedev.tictactoe.messaging.game.NewGridState;
-import nl.robinthedev.tictactoe.messaging.game.PlayerSymbol;
-import nl.robinthedev.tictactoe.messaging.game.SquareSymbol;
-import nl.robinthedev.tictactoe.messaging.game.SquareToMark;
+import nl.robinthedev.tictactoe.game.api.NewGridState;
+import nl.robinthedev.tictactoe.game.api.PlayerSymbol;
+import nl.robinthedev.tictactoe.game.api.SquareSymbol;
+import nl.robinthedev.tictactoe.game.api.SquareToMark;
 
 record Grid(List<SquareSymbol> squares) {
 

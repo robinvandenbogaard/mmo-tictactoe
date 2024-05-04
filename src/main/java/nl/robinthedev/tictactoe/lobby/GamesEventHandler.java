@@ -1,9 +1,9 @@
 package nl.robinthedev.tictactoe.lobby;
 
-import nl.robinthedev.tictactoe.messaging.game.events.GameEndedInDraw;
-import nl.robinthedev.tictactoe.messaging.game.events.GameFinished;
-import nl.robinthedev.tictactoe.messaging.game.events.NewGameStarted;
-import nl.robinthedev.tictactoe.messaging.game.events.SquareMarked;
+import nl.robinthedev.tictactoe.game.api.events.GameEndedInDraw;
+import nl.robinthedev.tictactoe.game.api.events.GameFinished;
+import nl.robinthedev.tictactoe.game.api.events.NewGameStarted;
+import nl.robinthedev.tictactoe.game.api.events.SquareMarked;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.slf4j.Logger;

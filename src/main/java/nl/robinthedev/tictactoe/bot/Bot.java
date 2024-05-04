@@ -1,9 +1,9 @@
 package nl.robinthedev.tictactoe.bot;
 
-import nl.robinthedev.tictactoe.messaging.game.commands.MarkSquare;
-import nl.robinthedev.tictactoe.messaging.game.GameId;
-import nl.robinthedev.tictactoe.messaging.game.NewGridState;
-import nl.robinthedev.tictactoe.messaging.game.PlayerId;
+import nl.robinthedev.tictactoe.game.api.GameId;
+import nl.robinthedev.tictactoe.game.api.NewGridState;
+import nl.robinthedev.tictactoe.game.api.PlayerId;
+import nl.robinthedev.tictactoe.game.api.commands.MarkSquare;
 
 class Bot {
 

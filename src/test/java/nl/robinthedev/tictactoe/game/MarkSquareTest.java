@@ -2,9 +2,9 @@ package nl.robinthedev.tictactoe.game;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import nl.robinthedev.tictactoe.messaging.game.commands.MarkSquare;
-import nl.robinthedev.tictactoe.messaging.game.SquareToMark;
-import nl.robinthedev.tictactoe.messaging.game.StartingPlayer;
+import nl.robinthedev.tictactoe.game.api.SquareToMark;
+import nl.robinthedev.tictactoe.game.api.StartingPlayer;
+import nl.robinthedev.tictactoe.game.api.commands.MarkSquare;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

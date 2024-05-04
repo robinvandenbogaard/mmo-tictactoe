@@ -1,8 +1,8 @@
 package nl.robinthedev.tictactoe.lobby;
 
-import nl.robinthedev.tictactoe.messaging.game.GameId;
-import nl.robinthedev.tictactoe.messaging.game.PlayerId;
-import nl.robinthedev.tictactoe.messaging.lobby.RunningGames;
+import nl.robinthedev.tictactoe.game.api.GameId;
+import nl.robinthedev.tictactoe.game.api.PlayerId;
+import nl.robinthedev.tictactoe.lobby.api.RunningGames;
 
 interface Games {
   void gameStarted(Game game);

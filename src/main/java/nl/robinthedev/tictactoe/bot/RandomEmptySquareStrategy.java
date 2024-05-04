@@ -1,8 +1,8 @@
 package nl.robinthedev.tictactoe.bot;
 
 import java.util.Random;
-import nl.robinthedev.tictactoe.messaging.game.NewGridState;
-import nl.robinthedev.tictactoe.messaging.game.SquareToMark;
+import nl.robinthedev.tictactoe.game.api.NewGridState;
+import nl.robinthedev.tictactoe.game.api.SquareToMark;
 
 class RandomEmptySquareStrategy implements MoveStrategy {
 

@@ -1,7 +1,7 @@
 package nl.robinthedev.tictactoe.game;
 
-import nl.robinthedev.tictactoe.messaging.game.PlayerId;
-import nl.robinthedev.tictactoe.messaging.game.PlayerSymbol;
+import nl.robinthedev.tictactoe.game.api.PlayerId;
+import nl.robinthedev.tictactoe.game.api.PlayerSymbol;
 
 record CurrentPlayer(PlayerId ref, PlayerSymbol playerSymbol) {
 
