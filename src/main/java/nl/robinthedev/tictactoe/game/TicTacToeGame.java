@@ -5,7 +5,7 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 import java.util.ArrayList;
 import nl.robinthedev.tictactoe.game.commands.MarkSquare;
 import nl.robinthedev.tictactoe.game.commands.StartNewGame;
-import nl.robinthedev.tictactoe.game.events.GameDraw;
+import nl.robinthedev.tictactoe.game.events.GameEndedInDraw;
 import nl.robinthedev.tictactoe.game.events.GameFinished;
 import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedGameIsOver;
 import nl.robinthedev.tictactoe.game.events.MarkSquareRejectedNotThePlayersTurn;
@@ -95,7 +95,7 @@ class TicTacToeGame {
       events.add(
           new GameFinished(gameId, currentPlayer.playerSymbol(), currentPlayer.ref(), nextPlayer));
     } else if (updatedGrid.isFullGrid()) {
-      events.add(new GameDraw(gameId, players.playerX().ref(), players.playerO().ref()));
+      events.add(new GameEndedInDraw(gameId, players.playerX().ref(), players.playerO().ref()));
     }
     return events;
   }
@@ -112,7 +112,7 @@ class TicTacToeGame {
   }
 
   @EventSourcingHandler
-  void handle(GameDraw event) {
+  void handle(GameEndedInDraw event) {
     gameOver = true;
   }
 }

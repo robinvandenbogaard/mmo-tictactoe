@@ -40,7 +40,7 @@ class GamesEventHandler {
   }
 
   @EventHandler
-  void handle(GameDraw event) {
+  void handle(GameEndedInDraw event) {
     log.info("{}", event);
     games.remove(event.gameId());
   }
