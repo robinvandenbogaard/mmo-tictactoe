@@ -1,6 +1,6 @@
 package nl.robinthedev.tictactoe.games;
 
-import nl.robinthedev.tictactoe.game.events.GameDraw;
+import nl.robinthedev.tictactoe.game.events.GameEndedInDraw;
 import nl.robinthedev.tictactoe.game.events.GameFinished;
 import nl.robinthedev.tictactoe.game.events.NewGameStarted;
 import nl.robinthedev.tictactoe.game.events.SquareMarked;
@@ -24,13 +24,13 @@ class GamesEventHandler {
 
   @EventHandler
   void handle(NewGameStarted event) {
-    log.info("{}", event);
+    log.trace("{}", event);
     games.gameStarted(Game.of(event));
   }
 
   @EventHandler
   void handle(SquareMarked event) {
-    log.info("{}", event);
+    log.trace("{}", event);
     Game game =
         games
             .get(event.gameId())
@@ -41,13 +41,13 @@ class GamesEventHandler {
 
   @EventHandler
   void handle(GameEndedInDraw event) {
-    log.info("{}", event);
+    log.trace("{}", event);
     games.remove(event.gameId());
   }
 
   @EventHandler
   void handle(GameFinished event) {
-    log.info("{}", event);
+    log.trace("{}", event);
     games.remove(event.gameId());
   }
 }
