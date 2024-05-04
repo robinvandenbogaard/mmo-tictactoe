@@ -20,6 +20,7 @@ class RatingEndpoint {
 
   private Ranking toRanking(Rating rating) {
     var total = rating.gamesCount();
-    return new Ranking(rating.id(), Summary.of(total, rating.win(), rating.draw(), rating.loss()));
+    return new Ranking(
+        rating.rankee(), Summary.of(total, rating.win(), rating.draw(), rating.loss()));
   }
 }
