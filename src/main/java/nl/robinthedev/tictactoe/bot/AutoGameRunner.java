@@ -77,7 +77,7 @@ class AutoGameRunner {
 
   private NewGridState toNewGridState(Grid grid) {
     return new NewGridState(
-        grid.grid().stream()
+        grid.cells().stream()
             .map(
                 mark ->
                     switch (mark) {
