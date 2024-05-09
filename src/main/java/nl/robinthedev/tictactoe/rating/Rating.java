@@ -1,6 +1,5 @@
 package nl.robinthedev.tictactoe.rating;
 
-
 record Rating(Rankee rankee, int draw, int win, int loss) {
 
   public static Rating fresh(Rankee rankee) {
