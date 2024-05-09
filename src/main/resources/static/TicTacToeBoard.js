@@ -8,7 +8,15 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
         this.scale = scale;
         this.grid = grid;
 
-        this.setSize(300, 300);
+        const size = 300; // Total width of the board
+        this.setSize(size, size);
+        this.borderWidth = 4; // Border width between cells
+        this.cellSize = (size - 2 * this.borderWidth) / 3; // Size of each cell
+
+        // Calculate the size and position of symbols
+        const symbolSize = this.cellSize * 0.7; // 70% of cell size
+        this.symbolOffset = (this.cellSize - symbolSize) / 2; // Offset to center symbols in cells
+
 
         this.createSymbols();
 
@@ -17,54 +25,61 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
     }
 
     createSymbols() {
-        const totalWidth = 300; // Total width of the board
-        const cellSize = (totalWidth - 2 * 4) / 3; // Size of each cell
-        const borderWidth = 4; // Border width between cells
-
-        // Calculate the size and position of symbols
-        const symbolSize = cellSize * 0.7; // 70% of cell size
-        const symbolOffset = (cellSize - symbolSize) / 2; // Offset to center symbols in cells
-
         // Add cells to the sprite
         for (let row = 0; row < 3; row++) {
             for (let col = 0; col < 3; col++) {
                 const symbol = this.grid[row][col];
-                const x = col * (cellSize + borderWidth);
-                const y = row * (cellSize + borderWidth);
 
                 if (symbol === 'X') {
-                    const bg = this.scene.add.sprite(x, y, 'EmptyTexture');
-                    bg.setOrigin(0);
-                    const symbolSprite = this.scene.add.sprite(x + symbolOffset, y + symbolOffset, 'XTexture');
-                    symbolSprite.setOrigin(0);
-                    this.add(bg);
-                    this.add(symbolSprite);
+                    this.addMarkedCell(col, row, 'XTexture');
                 } else if (symbol === 'O') {
-                    const bg = this.scene.add.sprite(x, y, 'EmptyTexture');
-                    bg.setOrigin(0);
-                    const symbolSprite = this.scene.add.sprite(x + symbolOffset, y + symbolOffset, 'OTexture');
-                    symbolSprite.setOrigin(0);
-                    this.add(bg);
-                    this.add(symbolSprite);
+                    this.addMarkedCell(col, row, 'OTexture');
                 } else {
-                    const bg = this.scene.add.sprite(x, y, 'EmptyTexture');
-                    bg.setOrigin(0);
-                    bg.setInteractive();
-                    bg.on('pointerdown', () => {
-                        const symbolSprite = this.scene.add.sprite(bg.x + symbolOffset, bg.y + symbolOffset, 'XTexture');
-                        symbolSprite.setOrigin(0);
-                        this.add(symbolSprite);
-                        this.emit('cellClicked', row, col)
-                    });
-                    bg.on('pointermove', () => {
-                        bg.alpha = 0.8;
-                    });
-                    bg.on('pointerout', () => {
-                        bg.alpha = 1;
-                    });
-                    this.add(bg);
+                    this.markCellEmpty(col, row);
                 }
             }
         }
+    }
+
+    markCellEmpty(col, row) {
+        const bg = this.addCellbackground(col, row);
+
+        bg.setInteractive();
+        bg.on('pointerdown', () => {
+            this.addCellSymbol(col, row, 'XTexture');
+            this.emit('cellClicked', row, col)
+        });
+        bg.on('pointermove', () => {
+            bg.alpha = 0.8;
+        });
+        bg.on('pointerout', () => {
+            bg.alpha = 1;
+        });
+    }
+
+    addMarkedCell(col, row, texture) {
+        this.addCellbackground(col, row);
+        this.addCellSymbol(col, row, texture);
+    }
+
+    addCellbackground(col, row) {
+        const bg = this.scene.add.sprite(this.getX(col), this.getY(row), 'EmptyTexture');
+        bg.setOrigin(0);
+        this.add(bg);
+        return bg;
+    }
+
+    addCellSymbol(col, row, texture) {
+        const symbolSprite = this.scene.add.sprite(this.getX(col) + this.symbolOffset, this.getY(row) + this.symbolOffset, texture);
+        symbolSprite.setOrigin(0);
+        this.add(symbolSprite);
+    }
+
+    getX(col) {
+        return col * (this.cellSize + this.borderWidth);
+    }
+
+    getY(row) {
+        return row * (this.cellSize + this.borderWidth);
     }
 }
