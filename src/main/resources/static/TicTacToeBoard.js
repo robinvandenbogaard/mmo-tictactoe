@@ -1,12 +1,13 @@
 class TicTacToeBoard extends Phaser.GameObjects.Container {
-    constructor(scene, x, y, scale, grid) {
+    constructor(scene, x, y, scale, game, active) {
         super(scene, x, y);
 
         // Store parameters
         this.x = x;
         this.y = y;
         this.scale = scale;
-        this.grid = grid;
+        this.grid = game.grid;
+        this.active = active;
 
         const size = 300; // Total width of the board
         this.setSize(size, size);
@@ -44,17 +45,19 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
     markCellEmpty(col, row) {
         const bg = this.addCellbackground(col, row);
 
-        bg.setInteractive();
-        bg.on('pointerdown', () => {
-            this.addCellSymbol(col, row, 'XTexture');
-            this.emit('cellClicked', row, col)
-        });
-        bg.on('pointermove', () => {
-            bg.alpha = 0.8;
-        });
-        bg.on('pointerout', () => {
-            bg.alpha = 1;
-        });
+        if (this.active) {
+            bg.setInteractive();
+            bg.on('pointerdown', () => {
+                this.addCellSymbol(col, row, 'XTexture');
+                this.emit('cellClicked', row, col)
+            });
+            bg.on('pointermove', () => {
+                bg.alpha = 0.8;
+            });
+            bg.on('pointerout', () => {
+                bg.alpha = 1;
+            });
+        }
     }
 
     addMarkedCell(col, row, texture) {

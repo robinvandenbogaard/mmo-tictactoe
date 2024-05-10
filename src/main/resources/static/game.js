@@ -22,7 +22,7 @@ class TicTacToeScene extends Phaser.Scene {
 
         this.getBoards().then(({board1, remainingBoards, gameId}) => {
             // Draw the first board at the top middle of the canvas with 100% scaling
-            const board = new TicTacToeBoard(this, (this.game.config.width / 2) - (boardWidth / 2), 0, 1, board1.grid);
+            const board = new TicTacToeBoard(this, (this.game.config.width / 2) - (boardWidth / 2), 0, 1, board1, true);
             this.add.existing(board);
 
             board.setInteractive()
@@ -76,7 +76,7 @@ class TicTacToeScene extends Phaser.Scene {
         boards.forEach((board, index) => {
             const boardX = startX + index * (scaledBoardWidth + boardSpacing);
             const boardY = startY + 50; // Adjust Y position as needed
-            const ticTacToeBoard = new TicTacToeBoard(this, boardX, boardY, scale, board.grid);
+            const ticTacToeBoard = new TicTacToeBoard(this, boardX, boardY, scale, board, false);
             this.add.existing(ticTacToeBoard);
         });
     }
