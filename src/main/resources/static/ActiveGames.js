@@ -16,6 +16,11 @@ class Game {
         this.gameId = gameId;
         this.grid = this.convertToMatrix(grid); // Convert grid to 3x3 matrix
         this.currentPlayer = currentPlayer;
+
+        // Ensure that board is properly initialized
+        if (!Array.isArray(this.grid) || this.grid.length !== 3 || !this.grid.every(row => Array.isArray(row) && row.length === 3)) {
+            throw new Error('Invalid board data received from server');
+        }
     }
 
     convertToMatrix(grid) {

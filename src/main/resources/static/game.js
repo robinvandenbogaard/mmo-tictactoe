@@ -22,23 +22,25 @@ class TicTacToeScene extends Phaser.Scene {
 
         this.getBoards().then(({board1, remainingBoards, gameId}) => {
             // Draw the first board at the top middle of the canvas with 100% scaling
-            const board = new TicTacToeBoard(this, (this.game.config.width / 2) - (boardWidth / 2), 0, 1, board1);
+            const board = new TicTacToeBoard(this, (this.game.config.width / 2) - (boardWidth / 2), 0, 1, board1.grid);
             this.add.existing(board);
 
             board.setInteractive()
             board.on('cellClicked', (r, c) => {
-                this.client.markCell(gameId, r, c).then(response => {
-                    console.log('Move made');
-                    setTimeout(() => {
-                        this.create();
-                    }, 1000);
-                })
+                this.client.markCell(board1.gameId, r, c)
+                    .then(response => {
+                        console.log('Move made');
+                        setTimeout(() => {
+                            this.create()
+                        }, 1000);
+                    })
                     .catch(error => {
                         console.error('Error marking cell:', error);
                     });
             })
             // Draw the remaining boards
             this.drawRemainingBoards(remainingBoards, boardWidth, boardHeight);
+            console.log('Current active game: aggregateIdentifier = "GameId[id=' + board1.gameId + ']"');
 
         }).catch(error => {
             console.error('Error:', error);
@@ -51,29 +53,16 @@ class TicTacToeScene extends Phaser.Scene {
             // Fetch active games data from the server
             const activeGames = await this.client.getActiveGames();
 
-            // Initialize default 3x3 grid with empty strings
-            const defaultGrid = Array.from({length: 3}, () => Array(3).fill(''));
-
             // Extract board1 and remainingBoards from activeGames
-            const board1 = activeGames.games.length > 0 ? activeGames.games[0].grid : defaultGrid;
-            const gameId = activeGames.games[0].gameId;
-            const remainingBoards = activeGames.games.slice(1).map(game => game.grid);
+            const board1 = activeGames.games.length > 0 ? activeGames.games[0] : defaultGrid;
+            const remainingBoards = activeGames.games.slice(1);
 
-            // Ensure that board1 and remainingBoards are properly initialized
-            if (!board1 || !Array.isArray(board1) || board1.length !== 3 || !board1.every(row => Array.isArray(row) && row.length === 3)) {
-                throw new Error('Invalid board1 data received from server');
-            }
-            if (!remainingBoards.every(board => Array.isArray(board) && board.length === 3 && board.every(row => Array.isArray(row) && row.length === 3))) {
-                throw new Error('Invalid remainingBoards data received from server');
-            }
-
-            return {board1, remainingBoards, gameId};
+            return {board1, remainingBoards};
         } catch (error) {
             console.error('Error getting boards:', error);
-            return {board1: defaultGrid, remainingBoards: [defaultGrid], gameId: 0}; // Return default grid in case of error
+            return undefined;
         }
     }
-
 
     // Helper method to draw the remaining boards
     drawRemainingBoards(boards, boardWidth, boardHeight) {
@@ -87,7 +76,7 @@ class TicTacToeScene extends Phaser.Scene {
         boards.forEach((board, index) => {
             const boardX = startX + index * (scaledBoardWidth + boardSpacing);
             const boardY = startY + 50; // Adjust Y position as needed
-            const ticTacToeBoard = new TicTacToeBoard(this, boardX, boardY, scale, board);
+            const ticTacToeBoard = new TicTacToeBoard(this, boardX, boardY, scale, board.grid);
             this.add.existing(ticTacToeBoard);
         });
     }
