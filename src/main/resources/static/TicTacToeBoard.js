@@ -109,6 +109,7 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
 
     updateGameId(gameId) {
         if (this.game != null && this.game.gameId !== gameId) {
+            this.game = null;
             this.removeAll(true);
             this.createSymbols()
         }
