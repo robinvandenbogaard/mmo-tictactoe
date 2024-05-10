@@ -67,8 +67,9 @@ class TicTacToeScene extends Phaser.Scene {
             const activeGames = await this.client.getActiveGames();
 
             // Extract board1 and remainingBoards from activeGames
-            const board1 = activeGames.games.length > 0 ? activeGames.games[0] : defaultGrid;
-            const remainingBoards = activeGames.games.slice(1);
+            const randomIndex = Math.floor(Math.random() * activeGames.games.length);
+            const board1 = activeGames.games[randomIndex];
+            const remainingBoards = activeGames.games.filter((_, index) => index !== randomIndex);
 
             return {board1, remainingBoards};
         } catch (error) {
