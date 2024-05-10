@@ -31,19 +31,21 @@ class TicTacToeScene extends Phaser.Scene {
         this.add.existing(mainBoard);
 
         mainBoard.setInteractive()
-        mainBoard.on('cellClicked', (gameId, row, column) => {
-            this.client.markCell(gameId, row, column)
-                .then(response => {
-                    console.log('Move made');
-                    setTimeout(() => {
-                        this.updateActiveGames()
-                    }, 1000);
-                })
-                .catch(error => {
-                    console.error('Error marking cell:', error);
-                });
-        })
+        mainBoard.on('cellClicked', this.onCellClicked)
         this.updateActiveGames();
+    }
+
+    onCellClicked(gameId, row, column) {
+        //this = the TicTacToeBoard
+        this.scene.client.markCell(gameId, row, column)
+            .then(response => {
+                setTimeout(() => {
+                    this.scene.updateActiveGames()
+                }, 1000);
+            })
+            .catch(error => {
+                console.error('Error marking cell:', error);
+            });
     }
 
     updateActiveGames() {
