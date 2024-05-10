@@ -73,9 +73,19 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
     }
 
     addCellSymbol(col, row, texture) {
-        const symbolSprite = this.scene.add.sprite(this.getX(col) + this.symbolOffset, this.getY(row) + this.symbolOffset, texture);
+        const x1 = this.getX(col) + this.symbolOffset;
+        const y1 = this.getY(row) + this.symbolOffset;
+        const symbolSprite = this.scene.add.sprite(0, 0, texture);
         symbolSprite.setOrigin(0);
         this.add(symbolSprite);
+
+        this.scene.tweens.add({
+            targets: symbolSprite,
+            x: x1,
+            y: y1,
+            duration: 500, // 2000 milliseconds = 2 seconds
+            ease: 'Cubic'
+        });
     }
 
     getX(col) {
