@@ -3,6 +3,7 @@ class TicTacToeScene extends Phaser.Scene {
     constructor() {
         super({key: 'TicTacToeScene'});
         this.client = new TicTacToeRestClient();
+        this.mainBoard = undefined;
     }
 
     // Preload assets
@@ -20,28 +21,35 @@ class TicTacToeScene extends Phaser.Scene {
         // Draw background covering the entire canvas
         this.add.rectangle(this.game.config.width / 2, this.game.config.height / 2, this.game.config.width, this.game.config.height, 0x495057);
 
-        this.getBoards().then(({board1, remainingBoards, gameId}) => {
-            // Draw the first board at the top middle of the canvas with 100% scaling
-            const x = (this.game.config.width / 2) - (boardWidth / 2);
-            const y = 0;
-            const board = new TicTacToeBoard(this, x, y, 1, board1, true);
-            this.add.existing(board);
+        // Draw the first board at the top middle of the canvas with 100% scaling
+        const x = (this.game.config.width / 2) - (boardWidth / 2);
+        const y = 0;
+        const mainBoard = new TicTacToeBoard(this, x, y, 1, true);
+        this.mainBoard = mainBoard;
 
-            board.setInteractive()
-            board.on('cellClicked', (r, c) => {
-                this.client.markCell(board1.gameId, r, c)
-                    .then(response => {
-                        console.log('Move made');
-                        setTimeout(() => {
-                            this.create()
-                        }, 1000);
-                    })
-                    .catch(error => {
-                        console.error('Error marking cell:', error);
-                    });
-            })
+        this.add.existing(mainBoard);
+
+        mainBoard.setInteractive()
+        mainBoard.on('cellClicked', (gameId, row, column) => {
+            this.client.markCell(gameId, row, column)
+                .then(response => {
+                    console.log('Move made');
+                    setTimeout(() => {
+                        this.updateActiveGames()
+                    }, 1000);
+                })
+                .catch(error => {
+                    console.error('Error marking cell:', error);
+                });
+        })
+        this.updateActiveGames();
+    }
+
+    updateActiveGames() {
+        this.getBoards().then(({board1, remainingBoards, gameId}) => {
+            this.mainBoard.updateGame(board1);
             // Draw the remaining boards
-            this.drawRemainingBoards(remainingBoards, boardWidth, boardHeight);
+            //this.drawRemainingBoards(remainingBoards);
             console.log('Current active game: aggregateIdentifier = "GameId[id=' + board1.gameId + ']"');
 
         }).catch(error => {
