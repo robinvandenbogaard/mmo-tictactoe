@@ -3,7 +3,8 @@ class TicTacToeScene extends Phaser.Scene {
     constructor() {
         super({key: 'TicTacToeScene'});
         this.client = new TicTacToeRestClient();
-        this.mainBoard = undefined;
+        this.mainBoard = null;
+        this.boards = new Map();
     }
 
     // Preload assets
@@ -49,7 +50,7 @@ class TicTacToeScene extends Phaser.Scene {
         this.getBoards().then(({board1, remainingBoards, gameId}) => {
             this.mainBoard.updateGame(board1);
             // Draw the remaining boards
-            //this.drawRemainingBoards(remainingBoards);
+            this.drawRemainingBoards(remainingBoards);
             console.log('Current active game: aggregateIdentifier = "GameId[id=' + board1.gameId + ']"');
 
         }).catch(error => {
@@ -75,20 +76,42 @@ class TicTacToeScene extends Phaser.Scene {
     }
 
     // Helper method to draw the remaining boards
-    drawRemainingBoards(boards, boardWidth, boardHeight) {
-        const scale = 0.35;
-        const boardSpacing = 20;
-        const scaledBoardWidth = boardWidth * scale;
-        const totalWidth = scaledBoardWidth * boards.length + boardSpacing * (boards.length - 1);
-        const startX = (this.game.config.width - totalWidth) / 2;
-        const startY = boardHeight + boardSpacing;
-
+    drawRemainingBoards(boards) {
         boards.forEach((board, index) => {
+            const ticTacToeBoard = this.createAdditionalBoard(board, index, boards.length);
+            this.add.existing(ticTacToeBoard);
+            ticTacToeBoard.updateGame(board);
+        });
+        this.cleanupRemovedBoards(boards);
+    }
+
+    createAdditionalBoard(board, index, numberOfBoards) {
+        if (this.boards.has(board.gameId)) {
+            return this.boards.get(board.gameId)
+        } else {
+            const scale = 0.35;
+            const boardSpacing = 20;
+            const scaledBoardWidth = 300 * scale;
+            const totalWidth = scaledBoardWidth * numberOfBoards + boardSpacing * (numberOfBoards - 1);
+            const startX = (this.game.config.width - totalWidth) / 2;
+            const startY = 300 + boardSpacing;
             const boardX = startX + index * (scaledBoardWidth + boardSpacing);
             const boardY = startY + 50; // Adjust Y position as needed
-            const ticTacToeBoard = new TicTacToeBoard(this, boardX, boardY, scale, board, false);
-            this.add.existing(ticTacToeBoard);
-        });
+            const ticTacToeBoard = new TicTacToeBoard(this, boardX, boardY, scale, false);
+            this.boards.set(board.gameId, ticTacToeBoard);
+            return ticTacToeBoard;
+        }
+    }
+
+    cleanupRemovedBoards(boards) {
+        for (const [key, value] of this.boards) {
+            // Check if the id of the value in the map exists in the array
+            if (!boards.some(item => item.gameId === key)) {
+                // If not found in the array, delete the map entry
+                this.boards.delete(key);
+                value.destroy();
+            }
+        }
     }
 }
 
