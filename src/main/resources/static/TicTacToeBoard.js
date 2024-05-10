@@ -37,7 +37,7 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
         if (this.active) {
             bg.setInteractive();
             bg.on('pointerdown', () => {
-                this.addCellSymbol(col, row, 'XTexture');
+                this.addMarkedCell(col, row, 'XTexture');
                 this.game.grid[row][col] = "X";
                 this.emit('cellClicked', this.game.gameId, row, col)
             });
