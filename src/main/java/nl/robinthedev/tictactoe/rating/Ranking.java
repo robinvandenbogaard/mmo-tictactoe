@@ -14,4 +14,8 @@ record Ranking(Rankee rankee, int rank, Summary summary) implements Comparable<R
   Ranking setRank(int rank) {
     return new Ranking(rankee, rank, summary);
   }
+
+  public boolean belongsTo(RankeeId rankeeId) {
+    return rankee.id().equals(rankeeId);
+  }
 }

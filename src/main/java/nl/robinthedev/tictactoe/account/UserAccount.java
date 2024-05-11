@@ -2,7 +2,7 @@ package nl.robinthedev.tictactoe.account;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
-import nl.robinthedev.tictactoe.account.api.AccountId;
+import nl.robinthedev.tictactoe.account.api.RankeeId;
 import nl.robinthedev.tictactoe.account.api.Username;
 import nl.robinthedev.tictactoe.account.api.commands.CreateAccount;
 import nl.robinthedev.tictactoe.account.api.commands.UpdateUserName;
@@ -18,7 +18,7 @@ import org.axonframework.spring.stereotype.Aggregate;
 @Aggregate
 class UserAccount {
 
-  @AggregateIdentifier AccountId accountId;
+  @AggregateIdentifier RankeeId accountId;
   Username username;
 
   public UserAccount() {

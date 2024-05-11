@@ -2,4 +2,4 @@ package nl.robinthedev.tictactoe.account.api;
 
 import java.util.UUID;
 
-public record AccountId(UUID id) {}
+public record RankeeId(UUID id) {}

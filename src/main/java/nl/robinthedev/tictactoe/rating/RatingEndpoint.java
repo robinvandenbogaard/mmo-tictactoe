@@ -1,7 +1,9 @@
 package nl.robinthedev.tictactoe.rating;
 
 import java.util.List;
+import java.util.UUID;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -13,7 +15,7 @@ class RatingEndpoint {
     this.ratings = ratings;
   }
 
-  @GetMapping("ranking")
+  @GetMapping(value = "ranking", produces = "application/json")
   List<Ranking> ranking() {
     return ratings.getAll().stream()
         .map(this::toRanking)
@@ -21,6 +23,18 @@ class RatingEndpoint {
         .map(WithIndex.indexed())
         .map(this::updateRank)
         .toList();
+  }
+
+  @GetMapping(value = "ranking/{rankeeId}", produces = "application/json")
+  Ranking accountRanking(@PathVariable UUID rankeeId) {
+    return ratings.getAll().stream()
+        .map(this::toRanking)
+        .sorted()
+        .map(WithIndex.indexed())
+        .map(this::updateRank)
+        .filter(ranking -> ranking.belongsTo(new RankeeId(rankeeId)))
+        .findFirst()
+        .orElseThrow();
   }
 
   private Ranking toRanking(Rating rating) {
