@@ -114,4 +114,14 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
             this.createSymbols()
         }
     }
+
+    tweenTo(x, y) {
+        this.scene.tweens.add({
+            targets: this,
+            x: x,
+            y: y,
+            duration: 500, // 2000 milliseconds = 2 seconds
+            ease: 'Cubic'
+        });
+    }
 }

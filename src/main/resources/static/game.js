@@ -98,17 +98,19 @@ class TicTacToeScene extends Phaser.Scene {
     }
 
     createAdditionalBoard(board, index, numberOfBoards) {
+        const scale = 0.35;
+        const boardSpacing = 20;
+        const scaledBoardWidth = 300 * scale;
+        const totalWidth = scaledBoardWidth * numberOfBoards + boardSpacing * (numberOfBoards - 1);
+        const startX = (this.game.config.width - totalWidth) / 2;
+        const startY = 300 + boardSpacing;
+        const boardX = startX + index * (scaledBoardWidth + boardSpacing);
+        const boardY = startY + 50; // Adjust Y position as needed
         if (this.boards.has(board.gameId)) {
-            return this.boards.get(board.gameId)
+            const existingBoard = this.boards.get(board.gameId);
+            existingBoard.tweenTo(boardX, boardY)
+            return existingBoard
         } else {
-            const scale = 0.35;
-            const boardSpacing = 20;
-            const scaledBoardWidth = 300 * scale;
-            const totalWidth = scaledBoardWidth * numberOfBoards + boardSpacing * (numberOfBoards - 1);
-            const startX = (this.game.config.width - totalWidth) / 2;
-            const startY = 300 + boardSpacing;
-            const boardX = startX + index * (scaledBoardWidth + boardSpacing);
-            const boardY = startY + 50; // Adjust Y position as needed
             const ticTacToeBoard = new TicTacToeBoard(this, boardX, boardY, scale, false);
             this.boards.set(board.gameId, ticTacToeBoard);
             return ticTacToeBoard;
