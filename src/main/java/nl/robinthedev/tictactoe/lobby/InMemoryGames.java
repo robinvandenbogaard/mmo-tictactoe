@@ -44,6 +44,6 @@ class InMemoryGames implements Games {
   }
 
   private RunningGame toRunningGame(Game game) {
-    return new RunningGame(game.id(), game.grid(), game.currentPlayer());
+    return new RunningGame(game.id(), game.grid(), game.currentPlayer(), game.lastActivity());
   }
 }

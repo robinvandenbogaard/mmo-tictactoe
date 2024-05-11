@@ -1,5 +1,6 @@
 package nl.robinthedev.tictactoe.lobby;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import nl.robinthedev.tictactoe.game.api.GameId;
 import nl.robinthedev.tictactoe.game.api.NewGridState;
@@ -9,12 +10,17 @@ import nl.robinthedev.tictactoe.game.api.events.NewGameStarted;
 import nl.robinthedev.tictactoe.lobby.api.Grid;
 import nl.robinthedev.tictactoe.lobby.api.Mark;
 
-record Game(GameId id, List<PlayerId> players, PlayerId currentPlayer, Grid grid) {
+record Game(
+    GameId id,
+    List<PlayerId> players,
+    PlayerId currentPlayer,
+    Grid grid,
+    LocalDateTime lastActivity) {
   public static Game of(NewGameStarted event) {
     var currentPlayer =
         event.startingPlayer().equals(StartingPlayer.X) ? event.playerX() : event.playerO();
     var allPlayers = List.of(event.playerX(), event.playerO());
-    return new Game(event.gameId(), allPlayers, currentPlayer, Grid.empty());
+    return new Game(event.gameId(), allPlayers, currentPlayer, Grid.empty(), LocalDateTime.now());
   }
 
   public boolean isPlayer(PlayerId playerId) {
@@ -22,7 +28,7 @@ record Game(GameId id, List<PlayerId> players, PlayerId currentPlayer, Grid grid
   }
 
   public Game updateGrid(NewGridState newGridState) {
-    return new Game(id, players, currentPlayer, toGrid(newGridState));
+    return new Game(id, players, currentPlayer, toGrid(newGridState), LocalDateTime.now());
   }
 
   private Grid toGrid(NewGridState newGridState) {
@@ -31,6 +37,6 @@ record Game(GameId id, List<PlayerId> players, PlayerId currentPlayer, Grid grid
   }
 
   public Game changeCurrentPlayer(PlayerId newCurrentPlayer) {
-    return new Game(id, players, newCurrentPlayer, grid);
+    return new Game(id, players, newCurrentPlayer, grid, LocalDateTime.now());
   }
 }

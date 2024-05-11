@@ -6,16 +6,24 @@ class ActiveGames {
             const gameId = gameData.gameId.id;
             const grid = gameData.grid.cells.map(cell => (cell === "EMPTY" ? "" : cell));
             const currentPlayer = gameData.currentPlayer.id;
-            return new Game(gameId, grid, currentPlayer);
+            const lastActivity = gameData.lastActivity;
+            return new Game(gameId, grid, currentPlayer, lastActivity);
+        });
+
+        this.games.sort((a, b) => {
+            const dateA = new Date(a.lastActivity);
+            const dateB = new Date(b.lastActivity);
+            return dateA - dateB;
         });
     }
 }
 
 class Game {
-    constructor(gameId, grid, currentPlayer) {
+    constructor(gameId, grid, currentPlayer, lastActivity) {
         this.gameId = gameId;
         this.grid = this.convertToMatrix(grid); // Convert grid to 3x3 matrix
         this.currentPlayer = currentPlayer;
+        this.lastActivity = lastActivity;
 
         // Ensure that board is properly initialized
         if (!Array.isArray(this.grid) || this.grid.length !== 3 || !this.grid.every(row => Array.isArray(row) && row.length === 3)) {
