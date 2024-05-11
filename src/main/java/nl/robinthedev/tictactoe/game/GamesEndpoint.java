@@ -4,7 +4,6 @@ import java.util.UUID;
 import nl.robinthedev.tictactoe.game.api.GameId;
 import nl.robinthedev.tictactoe.game.api.PlayerId;
 import nl.robinthedev.tictactoe.game.api.SquareToMark;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +23,7 @@ class GamesEndpoint {
     this.gameCommands = gameCommands;
   }
 
-  @GetMapping("games/new")
+  @PostMapping("games/new")
   public void createGame() {
     gameCommands.startNewGame(onlyHuman, botAnnabel);
   }

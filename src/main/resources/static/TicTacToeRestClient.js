@@ -46,7 +46,9 @@ class TicTacToeRestClient {
 
     newGame() {
         const newGameUrl = `/games/new`;
-        return fetch(newGameUrl)
+        return fetch(newGameUrl, {
+            method: 'POST'
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
