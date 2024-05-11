@@ -40,6 +40,8 @@ class TicTacToeScene extends Phaser.Scene {
         this.scene.client.markCell(gameId, row, column)
             .then(response => {
                 setTimeout(() => {
+                    this.scene.slideACloneOut(this.game);
+                    this.prepareSlideIn();
                     this.scene.updateActiveGames()
                 }, 1000);
             })
@@ -48,9 +50,19 @@ class TicTacToeScene extends Phaser.Scene {
             });
     }
 
+    slideACloneOut(game) {
+        const x = 200;
+        const y = 0;
+        const clone = new TicTacToeBoard(this, x, y, 1, false);
+        clone.updateGame(game, true);
+        this.add.existing(clone);
+        clone.tweenTo(700, 0)
+    }
+
     updateActiveGames() {
         this.getBoards().then(({board1, remainingBoards, gameId}) => {
-            this.mainBoard.updateGame(board1);
+            this.mainBoard.updateGame(board1, true);
+            this.mainBoard.slideIn();
             // Draw the remaining boards
             this.drawRemainingBoards(remainingBoards);
             console.log('Current active game: aggregateIdentifier = "GameId[id=' + board1.gameId + ']"');

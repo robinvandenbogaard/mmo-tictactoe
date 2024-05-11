@@ -37,6 +37,15 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
         if (this.active) {
             bg.setInteractive();
             bg.on('pointerdown', () => {
+
+                //Disable all other cells, so you can only mark one.
+                for (let row = 0; row < this.cellBackgrounds.length; row++) {
+                    for (let col = 0; col < this.cellBackgrounds[row].length; col++) {
+                        const sprite = this.cellBackgrounds[row][col];
+                        sprite.disableInteractive();
+                    }
+                }
+
                 this.addMarkedCell(col, row, 'XTexture');
                 this.game.grid[row][col] = "X";
                 this.emit('cellClicked', this.game.gameId, row, col)
@@ -50,9 +59,9 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
         }
     }
 
-    addMarkedCell(col, row, texture) {
+    addMarkedCell(col, row, texture, skipSymbolAnimation) {
         this.cellBackgrounds[row][col].disableInteractive();
-        this.addCellSymbol(col, row, texture);
+        this.addCellSymbol(col, row, texture, skipSymbolAnimation);
     }
 
     addCellbackground(col, row) {
@@ -62,20 +71,22 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
         return bg;
     }
 
-    addCellSymbol(col, row, texture) {
+    addCellSymbol(col, row, texture, skipSymbolAnimation) {
         const x1 = this.getX(col) + this.symbolOffset;
         const y1 = this.getY(row) + this.symbolOffset;
         const symbolSprite = this.scene.add.sprite(x1, y1, texture);
         symbolSprite.setOrigin(0);
-        symbolSprite.scale = 0.2;
+        symbolSprite.scale = skipSymbolAnimation ? 1 : 0.2;
         this.add(symbolSprite);
 
-        this.scene.tweens.add({
-            targets: symbolSprite,
-            scale: 1,
-            duration: 500, // 2000 milliseconds = 2 seconds
-            ease: 'Cubic'
-        });
+        if (!skipSymbolAnimation) {
+            this.scene.tweens.add({
+                targets: symbolSprite,
+                scale: 1,
+                duration: 500, // 2000 milliseconds = 2 seconds
+                ease: 'Cubic'
+            });
+        }
     }
 
     getX(col) {
@@ -86,7 +97,7 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
         return row * (this.cellSize + this.borderWidth);
     }
 
-    updateGame(game) {
+    updateGame(game, skipSymbolAnimation) {
         this.updateGameId(game.gameId);
         for (let row = 0; row < 3; row++) {
             for (let col = 0; col < 3; col++) {
@@ -98,9 +109,9 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
                 }
 
                 if (symbol === 'X') {
-                    this.addMarkedCell(col, row, 'XTexture');
+                    this.addMarkedCell(col, row, 'XTexture', skipSymbolAnimation);
                 } else if (symbol === 'O') {
-                    this.addMarkedCell(col, row, 'OTexture');
+                    this.addMarkedCell(col, row, 'OTexture', skipSymbolAnimation);
                 }
             }
         }
@@ -123,5 +134,15 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
             duration: 500, // 2000 milliseconds = 2 seconds
             ease: 'Cubic'
         });
+    }
+
+    prepareSlideIn() {
+        this.visible = false;
+        this.x = -300;
+    }
+
+    slideIn() {
+        this.visible = true;
+        this.tweenTo(200, 0)
     }
 }
