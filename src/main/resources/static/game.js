@@ -55,6 +55,15 @@ class TicTacToeScene extends Phaser.Scene {
             this.drawRemainingBoards(remainingBoards);
             console.log('Current active game: aggregateIdentifier = "GameId[id=' + board1.gameId + ']"');
 
+
+            //replenish games to 5.
+            if (this.boards.size < 5) {
+                for (let i = 0; i < 5 - this.boards.size; i++) {
+                    this.client.newGame().catch(error => {
+                        console.error('Error creating new games:', error);
+                    })
+                }
+            }
         }).catch(error => {
             console.error('Error:', error);
         });
