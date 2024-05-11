@@ -45,7 +45,7 @@ class AutoGameRunner {
   private void advanceBot(Bot bot) {
     RunningGames runningGames = getRunningGames(bot.getPlayerId());
     if (!runningGames.games().isEmpty()) {
-      log.info("Advancing running games");
+      log.debug("Advancing running games");
       advanceRunningGames(runningGames);
     }
 
@@ -61,7 +61,7 @@ class AutoGameRunner {
   }
 
   private void advanceRunningGames(RunningGames running) {
-    log.info("Found {}.", running);
+    log.debug("Found {} games: {}.", running.games().size(), running);
     running.games().stream()
         .filter(game -> game.currentPlayer().equals(running.playerId()))
         .forEach(
