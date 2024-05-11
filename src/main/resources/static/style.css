@@ -39,7 +39,29 @@ body {
     background-color: #495057; /* Complementary color */
     color: #fff; /* Text color */
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: left;
+    align-items: flex-start;
     flex-direction: column;
+}
+
+.player-stats {
+    font-family: Arial, sans-serif;
+}
+
+.rank {
+    font-size: 20px; /* Make the rank bigger */
+    color: #FFD700; /* Example color for rank */
+}
+
+.player-name {
+    font-size: 16px; /* Example font size for player name */
+}
+
+.icon {
+    font-size: 24px; /* Example font size for icon */
+    margin-right: 5px; /* Add some space between icon and rank */
+}
+
+.separator {
+    margin: 0 5px; /* Add space around the dash separator */
 }
