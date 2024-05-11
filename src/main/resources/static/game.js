@@ -43,7 +43,7 @@ class TicTacToeScene extends Phaser.Scene {
                     this.scene.slideACloneOut(this.game);
                     this.prepareSlideIn();
                     this.scene.updateActiveGames()
-                }, 1000);
+                }, 350);
             })
             .catch(error => {
                 console.error('Error marking cell:', error);

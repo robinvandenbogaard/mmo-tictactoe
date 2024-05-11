@@ -83,7 +83,7 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
             this.scene.tweens.add({
                 targets: symbolSprite,
                 scale: 1,
-                duration: 500, // 2000 milliseconds = 2 seconds
+                duration: 200,
                 ease: 'Cubic'
             });
         }
