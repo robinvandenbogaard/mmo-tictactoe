@@ -15,12 +15,21 @@ class RatingEndpoint {
 
   @GetMapping("ranking")
   List<Ranking> ranking() {
-    return ratings.getAll().stream().map(this::toRanking).sorted().toList();
+    return ratings.getAll().stream()
+        .map(this::toRanking)
+        .sorted()
+        .map(WithIndex.indexed())
+        .map(this::updateRank)
+        .toList();
   }
 
   private Ranking toRanking(Rating rating) {
     var total = rating.gamesCount();
     return new Ranking(
-        rating.rankee(), Summary.of(total, rating.win(), rating.draw(), rating.loss()));
+        rating.rankee(), -1, Summary.of(total, rating.win(), rating.draw(), rating.loss()));
+  }
+
+  private Ranking updateRank(WithIndex<Ranking> indexedRanking) {
+    return indexedRanking.value().setRank(indexedRanking.index() + 1);
   }
 }
