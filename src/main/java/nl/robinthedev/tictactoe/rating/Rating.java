@@ -29,4 +29,8 @@ record Rating(Rankee rankee, int draw, int win, int loss) {
   public Rating markHuman() {
     return new Rating(rankee().asHuman(), draw, win, loss);
   }
+
+  public Rating named(String username) {
+    return new Rating(rankee().named(username), draw, win, loss);
+  }
 }

@@ -14,7 +14,8 @@ class PlayerRatings {
   }
 
   public Rating get(RankeeId rankeeId) {
-    return ratings.computeIfAbsent(rankeeId, (id) -> Rating.fresh(new Rankee(id, false)));
+    return ratings.computeIfAbsent(
+        rankeeId, (id) -> Rating.fresh(new Rankee(id, "anonymous", false)));
   }
 
   public void update(Rating rating) {
