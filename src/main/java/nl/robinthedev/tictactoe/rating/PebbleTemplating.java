@@ -15,6 +15,7 @@ public class PebbleTemplating {
   public String personalRanking(Ranking ranking) {
     HashMap<String, Object> context = new HashMap<>();
     context.put("rank", ranking.rank());
+    context.put("name", ranking.rankee().username());
     context.put("win", ranking.summary().win().count());
     context.put("loss", ranking.summary().loss().count());
     context.put("draw", ranking.summary().draw().count());
