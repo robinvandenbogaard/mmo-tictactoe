@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.UUID;
 import nl.robinthedev.tictactoe.game.api.PlayerId;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +15,6 @@ class Bots {
 
   public Bots() {
     this.bots = new HashMap<>();
-    findOrCreate(new PlayerId(UUID.fromString("df78433d-72b0-4a9d-83b3-ef5aa021443b")), "John");
-    findOrCreate(new PlayerId(UUID.fromString("2be1d7ed-2f87-4b9f-9b41-e777b57dca6a")), "Annabel");
-    findOrCreate(new PlayerId(UUID.fromString("a9dfd8b2-dd64-441b-aa30-749d7b0124b8")), "Mozart");
-    findOrCreate(
-        new PlayerId(UUID.fromString("a2315108-0423-4ef5-9b92-8261104e3022")), "CheeseBro");
-    findOrCreate(
-        new PlayerId(UUID.fromString("d97d7862-34d3-4946-afae-d9fe419fcc23")), "JessyBell");
   }
 
   Bot findOrCreate(PlayerId playerId, String name) {
