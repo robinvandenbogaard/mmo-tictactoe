@@ -1,7 +1,7 @@
 package nl.robinthedev.tictactoe.account;
 
 import java.util.UUID;
-import nl.robinthedev.tictactoe.account.api.RankeeId;
+import nl.robinthedev.tictactoe.account.api.AccountId;
 import nl.robinthedev.tictactoe.account.api.Username;
 import nl.robinthedev.tictactoe.account.api.events.AccountCreated;
 import nl.robinthedev.tictactoe.account.api.events.UsernameUpdated;
@@ -12,7 +12,7 @@ import org.axonframework.test.aggregate.TestExecutor;
 class PlayerTestFixture {
 
   private static final UUID PLAYER_UUID = UUID.fromString("cb174089-0a41-4a38-a4c6-a5b4a361d1b3");
-  RankeeId accountId = new RankeeId(PLAYER_UUID);
+  AccountId accountId = new AccountId(PLAYER_UUID);
   Username firstGenUsername = new Username("user_1261231829");
   Username chosenUsername = new Username("Tic Tac Toe Master");
 
