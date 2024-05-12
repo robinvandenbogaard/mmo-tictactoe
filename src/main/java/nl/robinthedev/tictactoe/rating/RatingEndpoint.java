@@ -2,8 +2,8 @@ package nl.robinthedev.tictactoe.rating;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,15 +27,15 @@ class RatingEndpoint {
         .toList();
   }
 
-  @GetMapping(value = "ranking/{rankeeId}", produces = "text/html")
-  String accountRankingHtml(@PathVariable UUID rankeeId) {
+  @GetMapping(value = "ranking/account", produces = "text/html")
+  String accountRankingHtml(@CookieValue(name = "accountId") UUID accountId) {
     Ranking ranking =
         ratings.getAll().stream()
             .map(this::toRanking)
             .sorted()
             .map(WithIndex.indexed())
             .map(this::updateRank)
-            .filter(anyRanking -> anyRanking.belongsTo(new RankeeId(rankeeId)))
+            .filter(anyRanking -> anyRanking.belongsTo(new RankeeId(accountId)))
             .findFirst()
             .orElseThrow();
 

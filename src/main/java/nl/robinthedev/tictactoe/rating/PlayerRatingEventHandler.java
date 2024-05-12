@@ -1,6 +1,7 @@
 package nl.robinthedev.tictactoe.rating;
 
 import nl.robinthedev.tictactoe.account.api.events.AccountCreated;
+import nl.robinthedev.tictactoe.account.api.events.UsernameUpdated;
 import nl.robinthedev.tictactoe.botaccount.events.BotAccountCreated;
 import nl.robinthedev.tictactoe.game.api.events.GameEndedInDraw;
 import nl.robinthedev.tictactoe.game.api.events.GameFinished;
@@ -41,6 +42,13 @@ class PlayerRatingEventHandler {
   void handle(AccountCreated event) {
     log.trace("{}", event);
     ratings.update(ratings.get(RankeeId.of(event.accountId())).markHuman());
+  }
+
+  @EventHandler
+  void handle(UsernameUpdated event) {
+    log.trace("{}", event);
+    ratings.update(
+        ratings.get(RankeeId.of(event.accountId())).named(event.newUsername().username()));
   }
 
   @EventHandler
