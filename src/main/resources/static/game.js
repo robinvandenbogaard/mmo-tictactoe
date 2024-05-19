@@ -30,19 +30,23 @@ class TicTacToeScene extends Phaser.Scene {
 
         this.add.existing(mainBoard);
 
-        mainBoard.setInteractive()
-        mainBoard.on('cellClicked', this.onCellClicked)
+        mainBoard.setInteractive();
+        mainBoard.on('cellClicked', this.onCellClicked);
         this.updateActiveGames();
+
+        // Handle window resize
+        window.addEventListener('resize', this.resizeGame.bind(this));
+        this.resizeGame();
     }
 
     onCellClicked(gameId, row, column) {
-        //this = the TicTacToeBoard
+        // this = the TicTacToeBoard
         this.scene.client.markCell(gameId, row, column)
             .then(response => {
                 setTimeout(() => {
                     this.scene.slideACloneOut(this.game);
                     this.prepareSlideIn();
-                    this.scene.updateActiveGames()
+                    this.scene.updateActiveGames();
                 }, 350);
             })
             .catch(error => {
@@ -56,7 +60,7 @@ class TicTacToeScene extends Phaser.Scene {
         const clone = new TicTacToeBoard(this, x, y, 1, false);
         clone.updateGame(game, true);
         this.add.existing(clone);
-        clone.tweenTo(700, 0)
+        clone.tweenTo(700, 0);
     }
 
     updateActiveGames() {
@@ -67,13 +71,12 @@ class TicTacToeScene extends Phaser.Scene {
             this.drawRemainingBoards(remainingBoards);
             console.log('Current active game: aggregateIdentifier = "GameId[id=' + board1.gameId + ']"');
 
-
-            //replenish games to 5.
+            // Replenish games to 5.
             if (this.boards.size < 5) {
                 for (let i = 0; i < 5 - this.boards.size; i++) {
                     this.client.newGame().catch(error => {
                         console.error('Error creating new games:', error);
-                    })
+                    });
                 }
             }
         }).catch(error => {
@@ -87,7 +90,6 @@ class TicTacToeScene extends Phaser.Scene {
             // Fetch active games data from the server
             let activeGames = await this.client.getActiveGames();
 
-
             // Extract board1 and remainingBoards from activeGames
             const board1 = activeGames.games[0];
             const remainingBoards = activeGames.games.splice(1);
@@ -99,7 +101,6 @@ class TicTacToeScene extends Phaser.Scene {
         }
     }
 
-    // Helper method to draw the remaining boards
     drawRemainingBoards(boards) {
         boards.forEach((board, index) => {
             const ticTacToeBoard = this.createAdditionalBoard(board, index, boards.length);
@@ -120,8 +121,8 @@ class TicTacToeScene extends Phaser.Scene {
         const boardY = startY + 50; // Adjust Y position as needed
         if (this.boards.has(board.gameId)) {
             const existingBoard = this.boards.get(board.gameId);
-            existingBoard.tweenTo(boardX, boardY)
-            return existingBoard
+            existingBoard.tweenTo(boardX, boardY);
+            return existingBoard;
         } else {
             const ticTacToeBoard = new TicTacToeBoard(this, boardX, boardY, scale, false);
             this.boards.set(board.gameId, ticTacToeBoard);
@@ -139,8 +140,30 @@ class TicTacToeScene extends Phaser.Scene {
             }
         }
     }
-}
 
+    resizeGame() {
+        const canvas = this.sys.game.canvas;
+        const wrapper = document.getElementById('game-container');
+        if (!wrapper) return;
+
+        const wrapperWidth = wrapper.clientWidth;
+        const wrapperHeight = wrapper.clientHeight;
+        const aspectRatio = this.sys.game.config.width / this.sys.game.config.height;
+
+        let newWidth, newHeight;
+
+        if (wrapperWidth / wrapperHeight > aspectRatio) {
+            newHeight = wrapperHeight;
+            newWidth = newHeight * aspectRatio;
+        } else {
+            newWidth = wrapperWidth;
+            newHeight = newWidth / aspectRatio;
+        }
+
+        canvas.style.width = `${newWidth}px`;
+        canvas.style.height = `${newHeight}px`;
+    }
+}
 
 // Define the game configuration
 const config = {
