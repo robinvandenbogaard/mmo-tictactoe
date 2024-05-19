@@ -6,11 +6,12 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PebbleTemplating {
+class PebbleTemplating {
 
   public String personalRanking(Ranking ranking) {
     HashMap<String, Object> context = new HashMap<>();
@@ -20,6 +21,12 @@ public class PebbleTemplating {
     context.put("loss", ranking.summary().loss().count());
     context.put("draw", ranking.summary().draw().count());
     return processTemplate("personalRanking", context);
+  }
+
+  public String rankingList(List<Ranking> rankings) {
+    HashMap<String, Object> context = new HashMap<>();
+    context.put("rankings", rankings);
+    return processTemplate("rankingList", context);
   }
 
   private static String processTemplate(String template, Map<String, Object> context) {

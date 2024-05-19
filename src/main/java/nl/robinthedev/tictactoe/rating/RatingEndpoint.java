@@ -27,6 +27,19 @@ class RatingEndpoint {
         .toList();
   }
 
+  @GetMapping(value = "ranking", produces = "text/html")
+  String rankingHtml() {
+    List<Ranking> rankings =
+        ratings.getAll().stream()
+            .map(this::toRanking)
+            .sorted()
+            .map(WithIndex.indexed())
+            .map(this::updateRank)
+            .toList();
+
+    return templating.rankingList(rankings);
+  }
+
   @GetMapping(value = "ranking/account", produces = "text/html")
   String accountRankingHtml(@CookieValue(name = "accountId") UUID accountId) {
     Ranking ranking =

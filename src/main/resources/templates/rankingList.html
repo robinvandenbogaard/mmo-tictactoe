@@ -1,0 +1,25 @@
+<div class="rankings-list">
+    <h1>Leaderboard</h1>
+    <table class="rankings-table">
+        <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Wins</th>
+            <th>Losses</th>
+            <th>Draws</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for player in rankings %}
+        <tr class="player-stats">
+            <td>#{{ player.rank }}</td>
+            <td>{{ player.rankee.username }}</td>
+            <td>{{ player.summary.win.count }}</td>
+            <td>{{ player.summary.loss.count }}</td>
+            <td>{{ player.summary.draw.count }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
