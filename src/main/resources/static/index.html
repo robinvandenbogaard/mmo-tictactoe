@@ -15,24 +15,49 @@
     <link href="style.css" rel="stylesheet"> <!-- Include the style.css file -->
 </head>
 <body>
-<div class="content-pane">
-    <div id="game-container"></div>
-</div>
 
-<div class="thin-content-pane">
-    <div id="playerstats"
-         hx-get="/ranking/account"
-         hx-trigger="load, every 10s">
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="panel">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <a href="/" class="btn btn-outline-secondary">Game</a>
+                    <a href="/rankings.html" class="btn btn-outline-secondary">World ranking</a>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="rules">
-        <h1>Tic Tac Toe</h1>
-        <p>Players take turns putting their marks in empty squares. The first player to get 3 of her marks in a row (up,
-            down, across, or diagonally) is the winner. When all 9 squares are full, the game is over. If no player has
-            3
-            marks in a row, the game ends in a draw.</p>
+    <div class="row">
+        <div class="col-md-9 col-12">
+            <div class="panel" id="game-container"></div>
+        </div>
+        <div class="col-md-3 col-12">
+            <div class="row">
+                <div class="col-12">
+                    <div class="panel player-stats"
+                         hx-get="/ranking/account"
+                         hx-trigger="load, every 10s">
+                        <h1>Statistics</h1>
+                        <p>loading...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="panel">
+                        <h1>Tic Tac Toe</h1>
+                        <p>Players take turns putting their marks in empty squares. The first player to get 3 of her
+                            marks in a row (up,
+                            down, across, or diagonally) is the winner. When all 9 squares are full, the game is
+                            over. If no player has
+                            3
+                            marks in a row, the game ends in a draw.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
 <script src="game.js"></script>
 </body>
 </html>
