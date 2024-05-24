@@ -35,7 +35,8 @@ class GamesEventHandler {
         games
             .get(event.gameId())
             .updateGrid(event.gridState())
-            .changeCurrentPlayer(event.nextPlayer());
+            .changeCurrentPlayer(event.nextPlayer())
+            .changeToOtherSymbol(event.markedSquare().symbol());
     games.update(game);
   }
 
