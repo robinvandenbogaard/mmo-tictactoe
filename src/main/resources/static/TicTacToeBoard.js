@@ -36,6 +36,8 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
         this.cellBackgrounds[row][col] = bg;
         if (this.active) {
             bg.setInteractive();
+            var symbolSprite;
+
             bg.on('pointerdown', () => {
 
                 //Disable all other cells, so you can only mark one.
@@ -45,16 +47,24 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
                         sprite.disableInteractive();
                     }
                 }
+                symbolSprite.destroy();
+                symbolSprite = null;
 
-                this.addMarkedCell(col, row, 'XTexture');
-                this.game.grid[row][col] = "X";
+                this.addMarkedCell(col, row, this.game.currentSymbol + 'Texture', true);
+                this.game.grid[row][col] = this.game.currentSymbol;
                 this.emit('cellClicked', this.game.gameId, row, col)
             });
             bg.on('pointermove', () => {
                 bg.alpha = 0.8;
+                if (symbolSprite == null) {
+                    symbolSprite = this.addCellSymbol(col, row, this.game.currentSymbol + 'Texture', true);
+                    symbolSprite.alpha = .2
+                }
             });
             bg.on('pointerout', () => {
                 bg.alpha = 1;
+                symbolSprite.destroy();
+                symbolSprite = null;
             });
         }
     }
@@ -87,6 +97,7 @@ class TicTacToeBoard extends Phaser.GameObjects.Container {
                 ease: 'Cubic'
             });
         }
+        return symbolSprite;
     }
 
     getX(col) {

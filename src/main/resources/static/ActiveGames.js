@@ -6,8 +6,9 @@ class ActiveGames {
             const gameId = gameData.gameId.id;
             const grid = gameData.grid.cells.map(cell => (cell === "EMPTY" ? "" : cell));
             const currentPlayer = gameData.currentPlayer.id;
+            const currentSymbol = gameData.currentSymbol;
             const lastActivity = gameData.lastActivity;
-            return new Game(gameId, grid, currentPlayer, lastActivity);
+            return new Game(gameId, grid, currentPlayer, currentSymbol, lastActivity);
         });
 
         this.games.sort((a, b) => {
@@ -19,10 +20,11 @@ class ActiveGames {
 }
 
 class Game {
-    constructor(gameId, grid, currentPlayer, lastActivity) {
+    constructor(gameId, grid, currentPlayer, currentSymbol, lastActivity) {
         this.gameId = gameId;
         this.grid = this.convertToMatrix(grid); // Convert grid to 3x3 matrix
         this.currentPlayer = currentPlayer;
+        this.currentSymbol = currentSymbol;
         this.lastActivity = lastActivity;
 
         // Ensure that board is properly initialized
