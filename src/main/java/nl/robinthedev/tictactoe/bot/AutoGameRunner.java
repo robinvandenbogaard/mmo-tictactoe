@@ -5,15 +5,15 @@ import java.util.concurrent.ExecutionException;
 import nl.robinthedev.tictactoe.account.api.AccountId;
 import nl.robinthedev.tictactoe.account.api.Username;
 import nl.robinthedev.tictactoe.botaccount.commands.CreateBotAccount;
-import nl.robinthedev.tictactoe.game.api.GameId;
 import nl.robinthedev.tictactoe.game.api.NewGridState;
 import nl.robinthedev.tictactoe.game.api.PlayerId;
 import nl.robinthedev.tictactoe.game.api.SquareSymbol;
 import nl.robinthedev.tictactoe.game.api.commands.MarkSquare;
-import nl.robinthedev.tictactoe.game.api.commands.StartNewGame;
 import nl.robinthedev.tictactoe.lobby.api.Grid;
 import nl.robinthedev.tictactoe.lobby.api.RunningGames;
 import nl.robinthedev.tictactoe.lobby.api.queries.FetchRunningGames;
+import nl.robinthedev.tictactoe.matchmaker.QueueResult;
+import nl.robinthedev.tictactoe.matchmaker.RequestGame;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.queryhandling.QueryGateway;
 import org.slf4j.Logger;
@@ -55,14 +55,16 @@ class AutoGameRunner implements ApplicationListener<ApplicationStartedEvent> {
     }
 
     if (runningGames.games().size() < CONCURRENT_GAMES_PER_BOT) {
-      createNewGame(bot.getPlayerId());
+      requestNewGame(bot.getPlayerId());
     }
   }
 
-  private void createNewGame(PlayerId playerX) {
-    var playerO = bots.anyOtherBot(playerX);
-    var command = new StartNewGame(new GameId(UUID.randomUUID()), playerX, playerO);
-    commands.send(command);
+  private void requestNewGame(PlayerId playerX) {
+    try {
+      queries.query(new RequestGame(new AccountId(playerX.id())), QueueResult.class).get();
+    } catch (InterruptedException | ExecutionException e) {
+      log.error("Couldn't queue: ", e);
+    }
   }
 
   private void advanceRunningGames(RunningGames running) {
