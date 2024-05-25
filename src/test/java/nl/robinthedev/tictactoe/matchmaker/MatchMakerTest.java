@@ -1,12 +1,14 @@
 package nl.robinthedev.tictactoe.matchmaker;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.UUID;
 import nl.robinthedev.tictactoe.account.api.AccountId;
 import nl.robinthedev.tictactoe.game.api.commands.StartNewGame;
+import nl.robinthedev.tictactoe.matchmaker.api.AddedToQueue;
+import nl.robinthedev.tictactoe.matchmaker.api.MaximumQueueEntriesExceeded;
+import nl.robinthedev.tictactoe.matchmaker.api.RequestGame;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

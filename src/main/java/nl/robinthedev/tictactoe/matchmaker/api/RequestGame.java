@@ -1,4 +1,4 @@
-package nl.robinthedev.tictactoe.matchmaker;
+package nl.robinthedev.tictactoe.matchmaker.api;
 
 import nl.robinthedev.tictactoe.account.api.AccountId;
 

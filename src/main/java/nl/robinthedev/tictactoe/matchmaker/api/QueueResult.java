@@ -1,4 +1,4 @@
-package nl.robinthedev.tictactoe.matchmaker;
+package nl.robinthedev.tictactoe.matchmaker.api;
 
 public sealed interface QueueResult permits AddedToQueue, MaximumQueueEntriesExceeded {
   static QueueResult maxed() {

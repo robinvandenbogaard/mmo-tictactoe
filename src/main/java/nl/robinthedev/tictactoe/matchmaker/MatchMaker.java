@@ -10,6 +10,8 @@ import nl.robinthedev.tictactoe.account.api.AccountId;
 import nl.robinthedev.tictactoe.game.api.GameId;
 import nl.robinthedev.tictactoe.game.api.PlayerId;
 import nl.robinthedev.tictactoe.game.api.commands.StartNewGame;
+import nl.robinthedev.tictactoe.matchmaker.api.QueueResult;
+import nl.robinthedev.tictactoe.matchmaker.api.RequestGame;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.queryhandling.QueryHandler;
 import org.slf4j.Logger;
