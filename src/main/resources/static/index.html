@@ -44,6 +44,16 @@
             </div>
             <div class="row">
                 <div class="col-12">
+                    <div class="panel"
+                         hx-get="/queue/size"
+                         hx-trigger="load, every 5s">
+                        <h1>Queue Size</h1>
+                        <p>loading...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
                     <div class="panel">
                         <h1>Tic Tac Toe</h1>
                         <p>Players take turns putting their marks in empty squares. The first player to get 3 of her

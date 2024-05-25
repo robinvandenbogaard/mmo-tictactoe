@@ -10,7 +10,9 @@ import nl.robinthedev.tictactoe.account.api.AccountId;
 import nl.robinthedev.tictactoe.game.api.GameId;
 import nl.robinthedev.tictactoe.game.api.PlayerId;
 import nl.robinthedev.tictactoe.game.api.commands.StartNewGame;
+import nl.robinthedev.tictactoe.matchmaker.api.GetQueueSize;
 import nl.robinthedev.tictactoe.matchmaker.api.QueueResult;
+import nl.robinthedev.tictactoe.matchmaker.api.QueueSize;
 import nl.robinthedev.tictactoe.matchmaker.api.RequestGame;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.queryhandling.QueryHandler;
@@ -40,8 +42,14 @@ class MatchMaker {
     return QueueResult.added(queue.size());
   }
 
+  @QueryHandler
+  QueueSize handle(GetQueueSize query) {
+    return new QueueSize(queue.size());
+  }
+
   @Scheduled(initialDelay = 5_000, fixedDelay = 1_000)
   void findMatchAndCreateGame() {
+    log.trace("Attempting to find match and create game with a queue of {}", queue.size());
     // Create a Set to track unique AccountID records
     Set<AccountId> uniqueSet = new HashSet<>();
 
@@ -51,10 +59,13 @@ class MatchMaker {
             .filter(uniqueSet::add) // Add to the set and filter unique items
             .limit(2)
             .toList();
+    log.trace("Found {} unique accounts", uniqueAccountIDs.size());
+
     if (uniqueAccountIDs.size() == 2) {
       // Remove only the first occurrence of each found unique AccountID record from the queue
       for (var uniqueId : uniqueAccountIDs) {
         queue.remove(uniqueId);
+        log.trace("Removed unique account {} from queue", uniqueId);
       }
 
       var match = uniqueSet.stream().toList();
