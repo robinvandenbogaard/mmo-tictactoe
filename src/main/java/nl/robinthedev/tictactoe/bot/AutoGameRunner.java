@@ -74,9 +74,7 @@ class AutoGameRunner implements ApplicationListener<ApplicationStartedEvent> {
         .filter(game -> game.currentPlayer().equals(running.playerId()))
         .forEach(
             game -> {
-              var bot =
-                  bots.findOrCreate(
-                      game.currentPlayer(), game.currentPlayer().toString().substring(6));
+              var bot = bots.find(game.currentPlayer());
               var move = bot.makeMove(game.gameId(), toNewGridState(game.grid()));
               commands.send(
                   new MarkSquare(game.gameId(), game.currentPlayer(), move.squareToMark()));

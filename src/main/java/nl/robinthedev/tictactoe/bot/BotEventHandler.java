@@ -23,6 +23,6 @@ class BotEventHandler {
   @EventHandler
   void handle(BotAccountCreated event) {
     log.trace("{}", event);
-    bots.findOrCreate(new PlayerId(event.accountId().id()), event.username().username());
+    bots.create(new PlayerId(event.accountId().id()), event.username().username());
   }
 }
