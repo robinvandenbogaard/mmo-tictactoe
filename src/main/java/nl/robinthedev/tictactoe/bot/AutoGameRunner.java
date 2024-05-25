@@ -1,5 +1,6 @@
 package nl.robinthedev.tictactoe.bot;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import nl.robinthedev.tictactoe.account.api.AccountId;
@@ -105,16 +106,22 @@ class AutoGameRunner implements ApplicationListener<ApplicationStartedEvent> {
 
   @Override
   public void onApplicationEvent(ApplicationStartedEvent ignore) {
-    // This will generate warnings if the bot already exists, but will not recreate the bot
-    // aggregates.
-    commands.send(createBotCommand("df78433d-72b0-4a9d-83b3-ef5aa021443b", "TicTacTech"));
-    commands.send(createBotCommand("2be1d7ed-2f87-4b9f-9b41-e777b57dca6a", "TacTicTony"));
-    commands.send(createBotCommand("a9dfd8b2-dd64-441b-aa30-749d7b0124b8", "TicTacTactician"));
-    commands.send(createBotCommand("a2315108-0423-4ef5-9b92-8261104e3022", "TicTacTuring"));
-    commands.send(createBotCommand("d97d7862-34d3-4946-afae-d9fe419fcc23", "TicTacThinker"));
+    createBotCommand("df78433d-72b0-4a9d-83b3-ef5aa021443b", "TicTacTech")
+        .ifPresent(commands::send);
+    createBotCommand("2be1d7ed-2f87-4b9f-9b41-e777b57dca6a", "TacTicTony")
+        .ifPresent(commands::send);
+    createBotCommand("a9dfd8b2-dd64-441b-aa30-749d7b0124b8", "TicTacTactician")
+        .ifPresent(commands::send);
+    createBotCommand("a2315108-0423-4ef5-9b92-8261104e3022", "TicTacTuring")
+        .ifPresent(commands::send);
+    createBotCommand("d97d7862-34d3-4946-afae-d9fe419fcc23", "TicTacThinker")
+        .ifPresent(commands::send);
   }
 
-  private static CreateBotAccount createBotCommand(String uuid, String John) {
-    return new CreateBotAccount(new AccountId(UUID.fromString(uuid)), new Username(John));
+  private Optional<CreateBotAccount> createBotCommand(String uuid, String John) {
+    var botUuid = UUID.fromString(uuid);
+    if (bots.doesNotExist(new PlayerId(botUuid)))
+      return Optional.of(new CreateBotAccount(new AccountId(botUuid), new Username(John)));
+    return Optional.empty();
   }
 }
