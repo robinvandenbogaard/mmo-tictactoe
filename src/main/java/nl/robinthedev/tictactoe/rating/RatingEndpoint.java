@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 class RatingEndpoint {
 
   private final PlayerRatings ratings;
-  private final PebbleTemplating templating;
+  private final PebbleRatingTemplating templating;
 
-  public RatingEndpoint(PlayerRatings ratings, PebbleTemplating templating) {
+  public RatingEndpoint(PlayerRatings ratings, PebbleRatingTemplating templating) {
     this.ratings = ratings;
     this.templating = templating;
   }
