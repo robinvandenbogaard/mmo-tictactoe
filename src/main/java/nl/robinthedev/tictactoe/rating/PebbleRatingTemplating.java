@@ -23,5 +23,4 @@ class PebbleRatingTemplating {
     context.put("rankings", rankings);
     return PebbelTemplate.processTemplate("rankingList", context);
   }
-
 }
